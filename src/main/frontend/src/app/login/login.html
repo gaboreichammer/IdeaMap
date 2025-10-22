@@ -1,0 +1,54 @@
+<div class="login-container">
+  <div class="card">
+    <h2 class="text-3xl font-bold mb-6 text-indigo-700">User Login</h2>
+
+    <form (ngSubmit)="login()">
+      <!-- Username Input -->
+      <div class="mb-4">
+        <label for="username" class="input-label">Username</label>
+        <input
+          id="username"
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          required
+          class="input-field"
+          placeholder="Enter username"
+        >
+      </div>
+
+      <!-- Password Input -->
+      <div class="mb-6">
+        <label for="password" class="input-label">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          class="input-field"
+          placeholder="Enter password"
+        >
+      </div>
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        [disabled]="isLoading()"
+        class="login-button"
+      >
+        <span *ngIf="!isLoading()">Log In</span>
+        <span *ngIf="isLoading()">Logging in...</span>
+      </button>
+    </form>
+
+    <!-- Response Message Display -->
+    <div *ngIf="message() || error()" class="mt-6 p-3 rounded-lg text-center font-medium transition-all duration-300"
+         [ngClass]="{
+               'bg-green-100 text-green-700 border border-green-300': isSuccess(),
+               'bg-red-100 text-red-700 border border-red-300': !isSuccess()
+             }">
+      <p>{{ message() || error() }}</p>
+    </div>
+  </div>
+</div>

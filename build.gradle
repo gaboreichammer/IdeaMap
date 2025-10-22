@@ -1,0 +1,93 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4' // 1. Add Spring Boot plugin
+    id 'io.spring.dependency-management' version '1.1.5' // 2. Add dependency management plugin
+    id 'com.github.node-gradle.node' version '7.0.2'
+}
+
+group = 'org.eichgab'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 3. Add the Spring Boot Web Starter
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // You can also add other starters, for example, for JPA (database access):
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Boot's starter for testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // Keep your existing JUnit dependencies if needed, though starter-test includes them.
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    runtimeOnly 'com.h2database:h2'
+}
+
+node {
+    // Version of Node.js to use. Pick an LTS version compatible with your Angular version.
+    version = '22.12.0'
+    // Version of npm to use.
+    npmVersion = '10.2.4'
+    // Base URL for downloading Node.js distributions.
+    distBaseUrl = 'https://nodejs.org/dist'
+    // Make Gradle download and manage its own Node.js installation.
+    download = true
+    // Set the directory where your Angular project will live.
+    workDir = file("${project.projectDir}/src/main/frontend")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    // 4. Set the Java version
+    sourceCompatibility = JavaVersion.VERSION_21 // Or VERSION_22 etc.
+}
+
+def frontendDir = "$projectDir/src/main/frontend"
+
+// 1. Task to install Angular dependencies using npm
+tasks.register('frontendNpmInstall', NpmTask) {
+    // We keep the dependency on the *plugin's* npmSetup task
+    dependsOn tasks.named('npmSetup')
+
+    workingDir = file(frontendDir)
+
+    // Configuration
+    args = ['install']
+}
+
+// 2. Task to build the Angular application for production
+tasks.register('frontendNpmBuild', NpmTask) {
+    // Dependency now points to the newly renamed task
+    dependsOn tasks.named('frontendNpmInstall')
+
+    workingDir = file(frontendDir)
+
+    // Configuration
+    args = ['run', 'build', '--', '--configuration', 'production']
+}
+
+// 3. Task to copy the built Angular files into Spring Boot's static resources directory
+tasks.register('copyFrontend', Copy) {
+    // Dependency now points to the newly renamed task
+    dependsOn tasks.named('frontendNpmBuild')
+
+    // Configuration
+    from("$projectDir/src/main/frontend/dist/frontend/browser") // Adjust this path if needed!
+    into(layout.buildDirectory.dir('/resources/main/static'))
+}
+
+tasks.named('processResources') {
+    // Tell the processResources task to wait for the frontend files to be copied.
+    dependsOn tasks.named('copyFrontend')
+}

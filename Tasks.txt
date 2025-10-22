@@ -1,0 +1,5 @@
+-- connect to github!
+-- get rid of h2 database
+-- look into best practices for IDs for Mongo DB
+-- fix build so that frontend is actually moved into build -> build docker image?
+-- create idea service
