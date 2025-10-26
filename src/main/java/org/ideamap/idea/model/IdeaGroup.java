@@ -1,5 +1,6 @@
 package org.ideamap.idea.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public class IdeaGroup {
 
     @Id // Corresponds to "idea group id"
-    private String id;
+    private ObjectId id;
 
     private String name;
 
@@ -23,8 +24,12 @@ public class IdeaGroup {
         this.linkedIdeaId = linkedIdeaId;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
+    }
+
+    public String getIdAsString() {
+        return this.id != null ? this.id.toHexString() : null;
     }
 
     public String getName() {

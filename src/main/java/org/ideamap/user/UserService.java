@@ -22,13 +22,12 @@ public class UserService {
      */
     public boolean authenticate(String username, String password) {
         // 3. Find the user by their username
-        Optional<User> userOptional = userRepository.findByUsername(username);
+       MongoUser userOptional = userRepository.findByUsername(username);
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        if (userOptional != null) {
             // 4. Check if the provided password matches the one in the database
             // In a real app, passwords should be hashed!
-            return user.getPassword().equals(password);
+            return userOptional.getPassword().equals(password);
         }
 
         // 5. If user is not found, authentication fails

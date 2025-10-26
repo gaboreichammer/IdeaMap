@@ -1,5 +1,6 @@
 package org.ideamap.idea.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Tag {
 
     @Id // Denotes the primary key, MongoDB will generate an ObjectId if not provided
-    private String id;
+    private ObjectId id;
 
     // This is the "Tag name" property
     private String name;
@@ -17,8 +18,12 @@ public class Tag {
         this.name = name;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
+    }
+
+    public String getIdAsString() {
+        return this.id != null ? this.id.toHexString() : null;
     }
 
     public String getName() {
