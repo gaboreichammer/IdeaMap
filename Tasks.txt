@@ -1,3 +1,7 @@
 -- create hashing for password
--- fix build so that frontend is actually moved into build -> build docker image?
+-- create post login landing page
 -- create idea service
+
+
+
+-- fix build so that frontend is actually moved into build -> build docker image?

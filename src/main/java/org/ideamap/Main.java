@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,16 +28,19 @@ public class Main {
     public CommandLineRunner loadData(UserRepository userRepository,
                                       IdeaGroupRepository ideaGroupRepository,
                                       IdeaRepository ideaRepository,
-                                      TagRepository tagRepository) {
+                                      TagRepository tagRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             // --- MongoDB Logic (IdeaGroup, Idea, Tag) ---
             // Check if the MongoDB Ideas collection is empty before inserting
             if (ideaRepository.count() == 0) {
                 System.out.println("\nMongoDB collections are empty. Inserting initial data...");
 
+                // 1. Hash the plain-text passwords
+                String adminHashedPassword = passwordEncoder.encode("password123");
+                String userHashedPassword = passwordEncoder.encode("password456");
 
-                userRepository.save(new MongoUser("admin", "password123"));
-                userRepository.save(new MongoUser("user", "password456"));
+                userRepository.save(new MongoUser("admin", adminHashedPassword));
+                userRepository.save(new MongoUser("user", userHashedPassword));
                 System.out.println("Saved 2 users to the MongoDB.");
 
                 MongoUser admin = userRepository.findByUsername("admin");

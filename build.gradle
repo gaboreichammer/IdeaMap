@@ -16,13 +16,12 @@ dependencies {
     // 3. Add the Spring Boot Web Starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // You can also add other starters, for example, for JPA (database access):
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
     // Spring Boot's starter for testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // Keep your existing JUnit dependencies if needed, though starter-test includes them.
     testImplementation platform('org.junit:junit-bom:5.10.0')
