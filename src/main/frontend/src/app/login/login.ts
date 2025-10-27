@@ -1,18 +1,21 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, finalize, throwError } from 'rxjs';
-import { AuthService, LoginCredentials, LoginResponse} from '../services/auth.service'; // Assuming these are exported from auth.service
+import { Router, RouterOutlet } from '@angular/router'; // Import RouterOutlet for context
+import { AuthService, LoginCredentials, LoginResponse} from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterOutlet],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   // State using Angular Signals for reactivity
   username = signal('');
@@ -65,7 +68,8 @@ export class Login {
         this.message.set(response.message);
         this.isSuccess.set(true);
 
-       // Navigate or load authenticated content here
+          // Navigate to the secure landing page
+        this.router.navigate(['/landing']);
        },
         error: () => {
           // Do nothing, error signal is already set in catchError

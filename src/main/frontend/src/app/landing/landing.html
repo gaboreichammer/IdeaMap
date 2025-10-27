@@ -1,0 +1,22 @@
+<div class="landing-page">
+  <header class="header">
+    <h1 class="text-3xl font-bold text-white">IdeaMap Dashboard</h1>
+
+    <div class="user-info">
+      <!-- Display the username extracted from the token -->
+      <span class="text-white mr-4">Welcome, <strong class="font-extrabold">{{ username() }}</strong></span>
+
+      <button (click)="logout()" class="logout-button">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <main class="content">
+    <h2 class="text-2xl font-semibold mb-4">Secure Application Content</h2>
+    <p class="text-gray-700">This content is only accessible because you presented a valid JWT upon request (via the Auth Interceptor).</p>
+    <div class="data-area">
+      <p>Your secure data would be loaded here...</p>
+    </div>
+  </main>
+</div>
