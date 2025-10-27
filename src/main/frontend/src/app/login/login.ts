@@ -49,7 +49,7 @@ export class Login {
             this.error.set(err.error);
           } else {
             // General failure message
-            this.error.set('Connection error. Please check the server status.');
+            this.error.set('Connection error. Please check the server status. ' + err.error);
           }
           this.isSuccess.set(false);
           // Re-throw the error to keep the observable pipe correct

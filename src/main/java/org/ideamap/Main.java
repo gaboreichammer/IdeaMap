@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,8 +37,8 @@ public class Main {
                 System.out.println("\nMongoDB collections are empty. Inserting initial data...");
 
                 // 1. Hash the plain-text passwords
-                String adminHashedPassword = passwordEncoder.encode("password123");
-                String userHashedPassword = passwordEncoder.encode("password456");
+               String adminHashedPassword = passwordEncoder.encode("password123");
+               String userHashedPassword = passwordEncoder.encode("password456");
 
                 userRepository.save(new MongoUser("admin", adminHashedPassword));
                 userRepository.save(new MongoUser("user", userHashedPassword));

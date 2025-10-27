@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController // 1. Marks this as a controller for RESTful services
 @RequestMapping("/api/users") // 2. All endpoints in this class will start with /api/users
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final UserService userService;
