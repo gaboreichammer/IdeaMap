@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, finalize, throwError } from 'rxjs';
-import { AuthService, LoginCredentials } from '../services/auth.service'; // Assuming these are exported from auth.service
+import { AuthService, LoginCredentials, LoginResponse} from '../services/auth.service'; // Assuming these are exported from auth.service
 
 @Component({
   selector: 'app-login',
@@ -57,13 +57,16 @@ export class Login {
         })
       )
       .subscribe({
-        // 3. Handle successful response (HTTP 200)
-        next: (response: string) => {
-          // This captures "Login successful!" from your Spring controller
-          this.message.set(response);
-          this.isSuccess.set(true);
-        },
-        // Error is primarily handled in the catchError pipe, but included for completeness
+        next: (response: LoginResponse) => {
+          // Store the received JWT token
+        this.authService.storeToken(response.token);
+
+          // Update UI message
+        this.message.set(response.message);
+        this.isSuccess.set(true);
+
+       // Navigate or load authenticated content here
+       },
         error: () => {
           // Do nothing, error signal is already set in catchError
         }

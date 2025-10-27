@@ -8,6 +8,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class MongoUser {
 
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     @Id
     private ObjectId id;
     @Indexed(unique = true)

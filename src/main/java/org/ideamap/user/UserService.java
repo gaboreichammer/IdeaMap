@@ -18,17 +18,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean authenticate(String username, String password) {
+    public MongoUser authenticate(String username, String password) {
         // 3. Find the user by their username
        MongoUser user = userRepository.findByUsername(username);
 
-        if (user != null) {
-            // 4. Check if the provided password matches the one in the database
-            // In a real app, passwords should be hashed!
-            return passwordEncoder.matches(password, user.getPassword());
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            return user;
         }
 
-        // 5. If user is not found, authentication fails
-        return false;
+        return null;
     }
 }
