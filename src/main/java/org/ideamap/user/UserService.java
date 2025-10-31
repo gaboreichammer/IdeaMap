@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service // 1. Marks this as a Spring service component
+@Service
 public class UserService {
 
     private final UserRepository userRepository;

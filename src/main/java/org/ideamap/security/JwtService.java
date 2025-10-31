@@ -30,9 +30,18 @@ public class JwtService {
     public String generateToken(MongoUser user) {
         // Custom claims: embedding the user ID and username
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
 
-        return Jwts.builder().claims(claims).subject(user.getUsername()).issuedAt(new Date(System.currentTimeMillis()))
+        // FIX: Ensure the MongoDB ObjectId is converted to a simple String
+        // to prevent complex object serialization issues in the JWT payload.
+        if (user.getId() != null) {
+            // Convert the ObjectId to its 24-character hex string representation
+            claims.put("userId", user.getId().toHexString());
+        }
+
+        return Jwts.builder()
+                .claims(claims)
+                .subject(user.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())
                 .compact();

@@ -13,6 +13,7 @@ public class Tag {
     // This is the "Tag name" property
     private String name;
 
+    public Tag(){};
 
     public Tag(String name) {
         this.name = name;

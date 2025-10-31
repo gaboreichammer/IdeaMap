@@ -1,5 +1,7 @@
 package org.ideamap.security;
 
+import io.jsonwebtoken.io.Decoders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,33 +9,70 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity // Optional but good practice for clarity
+@EnableWebSecurity
 public class SecurityConfig {
 
-    // 1. PasswordEncoder Bean (already present)
+    // 1. Inject the secret key from properties
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+
+    // 2. PasswordEncoder Bean (already present)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 2. SecurityFilterChain Bean: CRITICAL for configuring security and CORS
+    /**
+     * Configures the JwtDecoder to validate tokens using the application's secret key.
+     */
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        // Decode the Base64 Secret Key used by your JwtService
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+
+        // Create a SecretKey object from the decoded bytes.
+        SecretKey secretKeySpec = new SecretKeySpec(keyBytes, "HmacSHA256");
+
+        // Build the NimbusJwtDecoder using the secret key and the algorithm
+        return NimbusJwtDecoder.withSecretKey(secretKeySpec)
+                .macAlgorithm(MacAlgorithm.HS256)
+                .build();
+    }
+
+    // 3. SecurityFilterChain Bean: CRITICAL for configuring security and CORS
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF for APIs (unless you are using a secure token-based solution)
+                // Disable CSRF for APIs
                 .csrf(AbstractHttpConfigurer::disable)
 
+                // --- FIX APPLIED HERE ---
+                // Explicitly disable form login and HTTP basic auth to prevent early 401 rejection
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                // ------------------------
+
                 // Configure CORS
-                // .cors() uses the CorsConfigurationSource bean defined below
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // CRITICAL: Enable OAuth2 Resource Server support to process JWTs
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()))
+                )
 
                 // Configure authorization rules
                 .authorizeHttpRequests(auth -> auth
@@ -46,7 +85,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 3. CORS Configuration Source Bean: Defines the CORS policy
+    // 4. CORS Configuration Source Bean: Defines the CORS policy
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

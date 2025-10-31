@@ -1,5 +1,6 @@
 package org.ideamap;
 
+import org.bson.types.ObjectId;
 import org.ideamap.idea.IdeaGroupRepository;
 import org.ideamap.idea.IdeaRepository;
 import org.ideamap.idea.TagRepository;
@@ -15,7 +16,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -50,30 +53,31 @@ public class Main {
                     System.out.println("Found user by username 'admin': " + admin.getUsername());
                 }
 
+                ObjectId adminId = admin != null ? admin.getId() : null;
+
                 // 1. Create and Save Tag
                 Tag firstTag = tagRepository.save(new Tag("First Tag"));
                 Tag secondTag = tagRepository.save(new Tag("Planning"));
 
                 List<String> tagIds = Arrays.asList(firstTag.getIdAsString(), secondTag.getIdAsString());
 
-                // 2. Create and Save Ideas
-                Idea firstIdea = new Idea("First Idea");
-                firstIdea.setText("Great idea man!");
-                firstIdea.setTagIds(tagIds); // Link the tags by ID
-
-                Idea savedFirstIdea = ideaRepository.save(firstIdea);
-
                 Idea secondIdea = new Idea("Second Idea");
+                secondIdea.setUserId(adminId);
                 secondIdea.setText("A detailed plan for implementation.");
-                // Optionally link tags or other ideas here
 
                 Idea savedSecondIdea = ideaRepository.save(secondIdea);
 
-                // 3. Create and Save IdeaGroup
-                IdeaGroup firstGroup = new IdeaGroup("First Idea Group");
+                // 2. Create and Save Ideas
+                Idea firstIdea = new Idea("First Idea");
+                firstIdea.setText("Great idea man!");
+                firstIdea.setTagIds(tagIds);
+                firstIdea.setUserId(adminId);
+                firstIdea.setLinkedIdeaIds(List.of(savedSecondIdea.getId().toString()));
 
-                // Link the ideas to the group using their generated IDs
-                firstGroup.setLinkedIdeaId(savedFirstIdea.getIdAsString());
+                Idea savedFirstIdea = ideaRepository.save(firstIdea);
+
+                // 3. Create and Save IdeaGroup
+                IdeaGroup firstGroup = new IdeaGroup("First Idea Group", savedFirstIdea.getIdAsString(), adminId);
 
                 ideaGroupRepository.save(firstGroup);
 

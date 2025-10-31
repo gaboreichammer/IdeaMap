@@ -9,19 +9,26 @@ import java.util.List;
 @Document(collection = "ideaGroups") // Maps this class to a MongoDB collection named 'ideaGroups'
 public class IdeaGroup {
 
-    @Id // Corresponds to "idea group id"
+    @Id
     private ObjectId id;
 
     private String name;
 
-    // This is the "linked idea id" property.
+    private ObjectId userId;
+
     private String linkedIdeaId;
+
+    public IdeaGroup() {
+    };
+
     public IdeaGroup(String name) {
         this.name = name;
     }
-    public IdeaGroup(String name, String linkedIdeaId) {
+
+    public IdeaGroup(String name, String linkedIdeaId, ObjectId userId) {
         this.name = name;
         this.linkedIdeaId = linkedIdeaId;
+        this.userId = userId;
     }
 
     public ObjectId getId() {
@@ -46,5 +53,13 @@ public class IdeaGroup {
 
     public void setLinkedIdeaId(String linkedIdeaId) {
         this.linkedIdeaId = linkedIdeaId;
+    }
+
+    public ObjectId getUserId() {
+        return userId;
+    }
+
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
     }
 }

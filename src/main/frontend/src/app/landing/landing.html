@@ -13,10 +13,33 @@
   </header>
 
   <main class="content">
-    <h2 class="text-2xl font-semibold mb-4">Secure Application Content</h2>
-    <p class="text-gray-700">This content is only accessible because you presented a valid JWT upon request (via the Auth Interceptor).</p>
-    <div class="data-area">
-      <p>Your secure data would be loaded here...</p>
+    <div class="dashboard-layout">
+
+      <!-- Left Column: Idea Group List -->
+      <div class="sidebar">
+        <h2 class="text-xl font-bold mb-4 border-b pb-2">Your Idea Groups ({{ ideaGroups().length }})</h2>
+
+        <ul *ngIf="ideaGroups().length > 0; else noGroups" class="group-list">
+          <!-- Iterate over the fetched groups -->
+          <li *ngFor="let group of ideaGroups()" class="group-item">
+            <span class="group-name">{{ group.name }}</span>
+          </li>
+        </ul>
+
+        <ng-template #noGroups>
+          <p class="text-gray-500 italic">No idea groups found yet. Time to create one!</p>
+        </ng-template>
+      </div>
+
+      <!-- Right Column: Details/Main Content -->
+      <div class="details-area">
+        <h2 class="text-2xl font-semibold mb-4">Idea Group Details</h2>
+        <p class="text-gray-700">Select an Idea Group from the list on the left to view its ideas or manage its settings.</p>
+        <div class="data-area-placeholder">
+          <p>Details view placeholder...</p>
+        </div>
+      </div>
+
     </div>
   </main>
 </div>

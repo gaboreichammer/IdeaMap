@@ -12,6 +12,8 @@ public class MongoUser {
         this.id = id;
     }
 
+    public MongoUser(){};
+
     @Id
     private ObjectId id;
     @Indexed(unique = true)
