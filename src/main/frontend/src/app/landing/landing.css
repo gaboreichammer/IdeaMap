@@ -24,6 +24,11 @@
     align-items: center;
 }
 
+.user-info span {
+    /* Adding a reliable margin-right of 1.5rem (24px) */
+    margin-right: 1.5rem;
+}
+
 .logout-button {
     background-color: #f59e0b; /* Amber */
     color: white;
@@ -39,34 +44,25 @@
     background-color: #d97706; /* Darker amber on hover */
 }
 
-/* Content Area */
+/* --- Dashboard Layout --- */
 .content {
     padding: 2rem;
-    max-width: 1400px; /* Increased max-width for the dual column layout */
+    max-width: 1400px; /* Increased max width for better dashboard look */
     margin: 0 auto;
 }
 
-/* --- New Dashboard Layout --- */
 .dashboard-layout {
     display: flex;
     gap: 2rem;
-    min-height: calc(100vh - 100px); /* Fill remaining viewport height */
 }
 
+/* Left Sidebar (Idea Group List) */
 .sidebar {
-    flex: 0 0 320px; /* Fixed width for the list of Idea Groups */
+    width: 300px;
+    flex-shrink: 0;
     background-color: white;
+    border-radius: 0.75rem;
     padding: 1.5rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    align-self: flex-start; /* Prevents stretching */
-}
-
-.details-area {
-    flex: 1; /* Takes up all remaining space */
-    padding: 2rem;
-    background-color: white;
-    border-radius: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     border-left: 5px solid #1a4d90;
 }
@@ -78,42 +74,112 @@
 }
 
 .group-item {
-    padding: 0.75rem 0.5rem;
+    padding: 1rem;
     margin-bottom: 0.5rem;
-    background-color: #f4f7f9;
     border-radius: 0.5rem;
+    background-color: #f9f9f9;
     cursor: pointer;
-    transition: background-color 0.2s, border-left 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s;
     display: flex;
-    flex-direction: column;
-    border-left: 3px solid transparent; /* Highlight on hover/active */
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eee;
 }
 
 .group-item:hover {
-    background-color: #e6e9eb;
-    border-left-color: #f59e0b; /* Amber highlight */
+    background-color: #f0f4f7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.group-name {
+.group-item.selected {
+    background-color: #1a4d90; /* Deep Blue for selection */
+    color: white;
     font-weight: 600;
+    box-shadow: 0 4px 8px rgba(26, 77, 144, 0.3);
+    border-color: #1a4d90;
+}
+
+.group-item.selected .linked-tag {
+    background-color: white;
     color: #1a4d90;
 }
 
-.group-id {
+.group-name {
+    /* Ensures name takes up available space */
+    flex-grow: 1;
+}
+
+.linked-tag {
     font-size: 0.75rem;
-    color: #9ca3af;
-    margin-top: 0.2rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px; /* Pill shape */
+    background-color: #3b82f6; /* Blue tag */
+    color: white;
+    font-weight: 500;
+}
+
+/* Right Column (Details) */
+.details-area {
+    flex-grow: 1;
 }
 
 .data-area-placeholder {
     margin-top: 1.5rem;
     padding: 2rem;
-    background-color: #f4f7f9;
-    border-radius: 0.5rem;
-    text-align: center;
-    color: #6b7280;
-    min-height: 200px;
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    min-height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-left: 5px solid #1a4d90;
+}
+
+/* Specific Idea Detail Styling */
+.idea-detail-card {
+    border: 1px solid #e5e7eb;
+    min-height: 300px;
+}
+
+.tag-default {
+    background-color: #e0e7ff; /* Light indigo background */
+    color: #4338ca; /* Dark indigo text */
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.link-button {
+    background-color: #10b981; /* Emerald green */
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.link-button:hover {
+    background-color: #059669; /* Darker emerald */
+}
+
+/* --- FIX FOR LARGE SVG SPINNER --- */
+.idea-detail-card .animate-spin {
+    /* Enforcing a small size in pixels, overriding any default browser behavior */
+    width: 20px !important; /* Tailwind h-5/w-5 is typically 1.25rem or 20px */
+    height: 20px !important;
+}
+/* --- END FIX --- */
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 }

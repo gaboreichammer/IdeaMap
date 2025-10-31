@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { IdeaGroupService, IdeaGroup } from '../services/idea-group.service';
+import { IdeaService, Idea } from '../services/idea.service'; // Import IdeaService and Idea interface
 
 @Component({
   selector: 'app-landing',
@@ -14,12 +15,17 @@ import { IdeaGroupService, IdeaGroup } from '../services/idea-group.service';
 export class Landing implements OnInit {
   private authService = inject(AuthService);
   private ideaGroupService = inject(IdeaGroupService)
+  private ideaService = inject(IdeaService);
   private router = inject(Router);
 
-  // State to hold the displayed username
   username = signal<string>('');
-  // State to hold the fetched list of Idea Groups
   ideaGroups = signal<IdeaGroup[]>([]);
+
+  // State for the currently selected Idea Group
+  selectedIdeaGroup = signal<IdeaGroup | null>(null);
+  // State for the Idea linked to the selected Idea Group
+  linkedIdea = signal<Idea | null>(null);
+  isLoadingLinkedIdea = signal<boolean>(false);
 
   ngOnInit(): void {
     // Attempt to retrieve and display the username upon loading
@@ -41,6 +47,11 @@ export class Landing implements OnInit {
         next: (groups) => {
             console.log('Idea Groups loaded:', groups);
             this.ideaGroups.set(groups);
+
+            // Optionally select the first item on load
+            if (groups.length > 0) {
+                this.selectIdeaGroup(groups[0]);
+            }
         },
         error: (err) => {
             console.error('Failed to load Idea Groups:', err);
@@ -50,6 +61,34 @@ export class Landing implements OnInit {
             }
         }
     });
+  }
+
+  /**
+   * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
+   * @param group The IdeaGroup selected by the user.
+   */
+  selectIdeaGroup(group: IdeaGroup): void {
+    // 1. Update the selected group signal
+    this.selectedIdeaGroup.set(group);
+    this.linkedIdea.set(null); // Clear previous idea
+
+    const linkedId = group.linkedIdeaId;
+
+    if (linkedId) {
+        this.isLoadingLinkedIdea.set(true);
+        // 2. Fetch the linked Idea using the dedicated service and ID
+        this.ideaService.getIdeaById(linkedId).subscribe({
+            next: (idea) => {
+                this.linkedIdea.set(idea);
+                this.isLoadingLinkedIdea.set(false);
+            },
+            error: (err) => {
+                console.error(`Failed to load linked Idea ${linkedId}:`, err);
+                this.linkedIdea.set(null);
+                this.isLoadingLinkedIdea.set(false);
+            }
+        });
+    }
   }
 
   /**
