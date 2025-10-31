@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 // Define the structure of the IdeaGroup entity returned from the backend
 export interface IdeaGroup {
@@ -19,7 +20,7 @@ export class IdeaGroupService {
   private authService = inject(AuthService);
 
   // Base URL for the IdeaGroup controller
-  private readonly baseUrl = 'http://localhost:8080/api/idea';
+  private readonly ideaGroupBaseUrl = `${environment.apiBaseUrl}/idea`;
 
   /**
    * Retrieves the current JWT token from AuthService and constructs the Authorization header.
@@ -45,7 +46,7 @@ export class IdeaGroupService {
    * @returns An Observable of an array of IdeaGroup objects.
    */
   getIdeaGroupsForCurrentUser(): Observable<IdeaGroup[]> {
-    const url = `${this.baseUrl}/getIdeaGroup`;
+    const url = `${this.ideaGroupBaseUrl}/getIdeaGroup`;
 
     return this.http.get<IdeaGroup[]>(url, { headers: this.getAuthHeaders() });
   }

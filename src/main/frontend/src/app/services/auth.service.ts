@@ -2,6 +2,7 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 export interface LoginCredentials {
   username: string;
@@ -23,8 +24,7 @@ export class AuthService {
 
   // Use a flag to avoid repetitive checks in methods
   private isBrowser = isPlatformBrowser(this.platformId);
-
-  private baseUrl = 'http://localhost:8080/api/users';
+  private readonly baseUrl = `${environment.apiBaseUrl}/users`;
   private readonly TOKEN_KEY = 'auth_token';
 
   /**

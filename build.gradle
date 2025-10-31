@@ -84,7 +84,7 @@ tasks.register('frontendNpmBuild', NpmTask) {
     workingDir = file(frontendDir)
 
     // Configuration
-    args = ['run', 'build', '--', '--configuration', 'production']
+    args = ['run', 'build', '--', '--configuration', 'development']
 }
 
 // 3. Task to copy the built Angular files into Spring Boot's static resources directory
