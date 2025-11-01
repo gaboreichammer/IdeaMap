@@ -1,0 +1,17 @@
+<div *ngIf="linkedIdea() as idea; else noIdea">
+  <h4 class="text-xl font-bold mb-2 text-indigo-700">{{ idea.name }}</h4>
+
+  <p class="text-gray-700 mb-4">{{ idea.text }}</p>
+
+  <div class="flex flex-wrap gap-2 text-sm">
+    <span *ngFor="let tag of idea.tagIds" class="tag tag-default">{{ tag }}</span>
+  </div>
+
+  <a *ngIf="idea.link" [href]="idea.link" target="_blank" class="link-button mt-4 inline-block">
+    View Link
+  </a>
+</div>
+
+<ng-template #noIdea>
+  <p class="text-gray-500">No linked idea selected or available.</p>
+</ng-template>

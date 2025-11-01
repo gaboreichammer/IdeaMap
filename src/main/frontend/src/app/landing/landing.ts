@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { IdeaGroupService, IdeaGroup } from '../services/idea-group.service';
 import { IdeaService, Idea } from '../services/idea.service'; // Import IdeaService and Idea interface
+import { Ideapage } from '../ideapage/ideapage';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Ideapage],
   templateUrl: './landing.html',
   styleUrl: './landing.css'
 })
