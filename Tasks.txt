@@ -1,6 +1,13 @@
--- create hashing for password
--- create post login landing page
--- create idea service
+-- install tailwind
+-- add idea component!
+-- fix Tag display!
+-- add html formatted text display
+-- add more elaborate test data
+-- show linked ideas as buttons
+
+
+-- add best practice to store constants (userId) in Java
+
 
 
 
