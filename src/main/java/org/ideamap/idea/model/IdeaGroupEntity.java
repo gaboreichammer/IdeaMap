@@ -4,10 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Document(collection = "ideaGroups") // Maps this class to a MongoDB collection named 'ideaGroups'
-public class IdeaGroup {
+public class IdeaGroupEntity {
 
     @Id
     private ObjectId id;
@@ -18,14 +16,14 @@ public class IdeaGroup {
 
     private String linkedIdeaId;
 
-    public IdeaGroup() {
+    public IdeaGroupEntity() {
     };
 
-    public IdeaGroup(String name) {
+    public IdeaGroupEntity(String name) {
         this.name = name;
     }
 
-    public IdeaGroup(String name, String linkedIdeaId, ObjectId userId) {
+    public IdeaGroupEntity(String name, String linkedIdeaId, ObjectId userId) {
         this.name = name;
         this.linkedIdeaId = linkedIdeaId;
         this.userId = userId;

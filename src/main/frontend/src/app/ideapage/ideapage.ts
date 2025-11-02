@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core'; // Import 'input'
 import { CommonModule } from '@angular/common';
-import { Idea } from '../services/idea.service';
+import { Idea, Tag } from '../services/idea.service';
 
 @Component({
   selector: 'ideapage', // Make sure the selector matches the tag in landing.html

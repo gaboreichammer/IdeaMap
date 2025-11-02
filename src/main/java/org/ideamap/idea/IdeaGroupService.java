@@ -2,7 +2,7 @@ package org.ideamap.idea;
 
 
 import org.bson.types.ObjectId;
-import org.ideamap.idea.model.IdeaGroup;
+import org.ideamap.idea.model.IdeaGroupEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class IdeaGroupService {
         this.ideaGroupRepository = ideaGroupRepository;
     }
 
-    public List<IdeaGroup> getIdeaGroupForUser(String userId) {
+    public List<IdeaGroupEntity> getIdeaGroupForUser(String userId) {
        return ideaGroupRepository.findByUserId(new ObjectId(userId));
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "tags") // Maps this class to a MongoDB collection named 'tags'
-public class Tag {
+public class TagEntity {
 
     @Id // Denotes the primary key, MongoDB will generate an ObjectId if not provided
     private ObjectId id;
@@ -13,9 +13,9 @@ public class Tag {
     // This is the "Tag name" property
     private String name;
 
-    public Tag(){};
+    public TagEntity(){};
 
-    public Tag(String name) {
+    public TagEntity(String name) {
         this.name = name;
     }
 

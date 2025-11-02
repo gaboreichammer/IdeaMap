@@ -1,6 +1,6 @@
 package org.ideamap.idea;
 
-import org.ideamap.idea.model.IdeaGroup;
+import org.ideamap.idea.model.IdeaGroupEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -25,7 +25,7 @@ public class IdeaGroupController {
      * @return A ResponseEntity containing a list of IdeaGroup entities (may be empty).
      */
     @GetMapping("/getIdeaGroup")
-    public ResponseEntity<List<IdeaGroup>> getIdeaGroup(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<IdeaGroupEntity>> getIdeaGroup(@AuthenticationPrincipal Jwt jwt) {
         // Retrieve the custom 'userId' claim that was embedded during token generation.
         String userIdString = jwt.getClaimAsString("userId");
 
@@ -37,9 +37,9 @@ public class IdeaGroupController {
         }
 
         // Use the extracted user ID to query the database
-        List<IdeaGroup> ideaGroups = ideaGroupService.getIdeaGroupForUser(userIdString);
+        List<IdeaGroupEntity> ideaGroupEntities = ideaGroupService.getIdeaGroupForUser(userIdString);
 
         // Best Practice: Return 200 OK even if the list is empty, indicating a successful query
-        return ResponseEntity.ok(ideaGroups);
+        return ResponseEntity.ok(ideaGroupEntities);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document(collection = "ideas") // Maps this class to a MongoDB collection named 'ideas'
-public class Idea {
+public class IdeaEntity {
 
     @Id // Corresponds to "idea id"
     private ObjectId id;
@@ -29,13 +29,13 @@ public class Idea {
     // List of tags: You should also store the IDs of the Tag documents.
     private List<String> tagIds;
 
-    public Idea(){};
+    public IdeaEntity(){};
 
-    public Idea(String name) {
+    public IdeaEntity(String name) {
         this.name = name;
     }
 
-    public Idea(String name, String text, String link, String image, List<String> linkedIdeaIds, List<String> tagIds, ObjectId userId) {
+    public IdeaEntity(String name, String text, String link, String image, List<String> linkedIdeaIds, List<String> tagIds, ObjectId userId) {
         this.name = name;
         this.text = text;
         this.link = link;

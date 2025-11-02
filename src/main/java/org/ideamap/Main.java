@@ -4,9 +4,9 @@ import org.bson.types.ObjectId;
 import org.ideamap.idea.IdeaGroupRepository;
 import org.ideamap.idea.IdeaRepository;
 import org.ideamap.idea.TagRepository;
-import org.ideamap.idea.model.Idea;
-import org.ideamap.idea.model.IdeaGroup;
-import org.ideamap.idea.model.Tag;
+import org.ideamap.idea.model.IdeaEntity;
+import org.ideamap.idea.model.IdeaGroupEntity;
+import org.ideamap.idea.model.TagEntity;
 import org.ideamap.user.MongoUser;
 import org.ideamap.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,11 +14,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -56,28 +53,28 @@ public class Main {
                 ObjectId adminId = admin != null ? admin.getId() : null;
 
                 // 1. Create and Save Tag
-                Tag firstTag = tagRepository.save(new Tag("First Tag"));
-                Tag secondTag = tagRepository.save(new Tag("Planning"));
+                TagEntity firstTagEntity = tagRepository.save(new TagEntity("First Tag"));
+                TagEntity secondTagEntity = tagRepository.save(new TagEntity("Planning"));
 
-                List<String> tagIds = Arrays.asList(firstTag.getIdAsString(), secondTag.getIdAsString());
+                List<String> tagIds = Arrays.asList(firstTagEntity.getIdAsString(), secondTagEntity.getIdAsString());
 
-                Idea secondIdea = new Idea("Second Idea");
-                secondIdea.setUserId(adminId);
-                secondIdea.setText("A detailed plan for implementation.");
+                IdeaEntity secondIdeaEntity = new IdeaEntity("Second Idea");
+                secondIdeaEntity.setUserId(adminId);
+                secondIdeaEntity.setText("A detailed plan for implementation.");
 
-                Idea savedSecondIdea = ideaRepository.save(secondIdea);
+                IdeaEntity savedSecondIdeaEntity = ideaRepository.save(secondIdeaEntity);
 
                 // 2. Create and Save Ideas
-                Idea firstIdea = new Idea("First Idea");
-                firstIdea.setText("Great idea man!");
-                firstIdea.setTagIds(tagIds);
-                firstIdea.setUserId(adminId);
-                firstIdea.setLinkedIdeaIds(List.of(savedSecondIdea.getId().toString()));
+                IdeaEntity firstIdeaEntity = new IdeaEntity("First Idea");
+                firstIdeaEntity.setText("Great idea man!");
+                firstIdeaEntity.setTagIds(tagIds);
+                firstIdeaEntity.setUserId(adminId);
+                firstIdeaEntity.setLinkedIdeaIds(List.of(savedSecondIdeaEntity.getId().toString()));
 
-                Idea savedFirstIdea = ideaRepository.save(firstIdea);
+                IdeaEntity savedFirstIdeaEntity = ideaRepository.save(firstIdeaEntity);
 
                 // 3. Create and Save IdeaGroup
-                IdeaGroup firstGroup = new IdeaGroup("First Idea Group", savedFirstIdea.getIdAsString(), adminId);
+                IdeaGroupEntity firstGroup = new IdeaGroupEntity("First Idea Group", savedFirstIdeaEntity.getIdAsString(), adminId);
 
                 ideaGroupRepository.save(firstGroup);
 

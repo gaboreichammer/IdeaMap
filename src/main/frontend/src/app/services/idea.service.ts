@@ -12,8 +12,13 @@ export interface Idea {
   link: string;
   image: string;
   linkedIdeaIds: string[];
-  tagIds: string[];
+  tags: Tag [];
   userId: string;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
 }
 
 @Injectable({
