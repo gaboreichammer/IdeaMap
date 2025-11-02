@@ -1,10 +1,10 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { IdeaGroupService, IdeaGroup } from '../services/idea-group.service';
-import { IdeaService, Idea } from '../services/idea.service'; // Import IdeaService and Idea interface
-import { Ideapage } from '../ideapage/ideapage';
+import { AuthService } from '../../services/auth.service';
+import { IdeaGroupService, IdeaGroup } from '../../services/idea-group.service';
+import { IdeaService, Idea } from '../../services/idea.service';
+import { Ideapage } from '../idea-page/ideapage';
 
 @Component({
   selector: 'app-landing',

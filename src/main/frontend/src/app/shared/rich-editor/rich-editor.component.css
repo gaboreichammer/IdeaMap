@@ -1,0 +1,24 @@
+/* Optional: If you want to customize the Quill editor appearance that Tailwind
+  classes in the template don't cover, put it here.
+*/
+
+/* Example to ensure the editor area itself looks clean */
+:host {
+  display: block; /* Important for component encapsulation */
+  min-height: 200px;
+}
+
+/* If you use 'quill.snow.css', Quill adds a default bottom border and spacing.
+  You can override it here if needed.
+*/
+.ql-container {
+  font-family: 'Inter', sans-serif;
+  border-bottom-left-radius: 0.5rem; /* Rounded corners for the container */
+  border-bottom-right-radius: 0.5rem;
+}
+
+/* Ensures the toolbar also has rounded corners */
+.ql-toolbar {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}

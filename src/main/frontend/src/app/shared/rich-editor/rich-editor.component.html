@@ -1,0 +1,10 @@
+<div class="editor-container">
+  <quill-editor
+    class="border border-gray-300 rounded-lg shadow-inner bg-white"
+    [styles]="{minHeight: '200px', maxHeight: '500px'}"
+    [placeholder]="'Type your idea content here...'"
+    [ngModel]="content()"
+    (ngModelChange)="content.set($event)"
+    (onContentChanged)="logChange($event)">
+  </quill-editor>
+</div>
