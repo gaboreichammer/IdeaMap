@@ -1,7 +1,7 @@
 import { Component, input, effect, signal } from '@angular/core'; // Import 'input'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Idea, Tag } from '../../services/idea.service';
+import { Idea, Tag, IdeaLink } from '../../services/idea.service';
 import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.component';
 
 @Component({
@@ -41,5 +41,9 @@ export class Ideapage {
       // this.ideaService.updateIdea(dataToSave).subscribe(...)
       alert('Idea saved successfully (simulated)! Check console for HTML output.');
     }
+  }
+
+  clickLinkedIdea(clickedIdea: IdeaLink) {
+    console.log('idea clicked:', clickedIdea.id);
   }
 }

@@ -1,8 +1,9 @@
 package org.ideamap.idea;
 
 import org.bson.types.ObjectId;
-import org.ideamap.idea.dto.IdeaWithTagsDto;
+import org.ideamap.idea.dto.IdeaWithTagsLinksDto;
 import org.ideamap.idea.model.IdeaEntity;
+import org.ideamap.idea.model.IdeaProjection;
 import org.ideamap.idea.model.TagEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,23 +22,26 @@ public class IdeaService {
         this.tagRepository = tagRepository;
     }
 
-    public IdeaEntity findById(String id) {
-        return ideaRepository.findById(new ObjectId(id));
-    }
-
-    public IdeaWithTagsDto findIdeaWithTags(String id) {
-        IdeaEntity idea = ideaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+    public IdeaWithTagsLinksDto findIdeaWithTags(String id) {
+        IdeaEntity idea = ideaRepository.findById(new ObjectId(id)).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Idea with ID " + id + " not found"
         ));
 
         List<ObjectId> tagObjectIds = idea.getTagIds().stream()
-                .filter(ObjectId::isValid) // Only try to convert valid ObjectIds
+                .filter(ObjectId::isValid)
                 .map(ObjectId::new)
                 .toList();
 
         List<TagEntity> tags = tagRepository.findAllById(tagObjectIds);
 
-        return new IdeaWithTagsDto(idea, tags);
+        List<ObjectId> linkedIdeaObjectIds = idea.getLinkedIdeaIds().stream()
+                .filter(ObjectId::isValid)
+                .map(ObjectId::new)
+                .toList();
+
+        List<IdeaProjection> linkedIdeas = ideaRepository.findByIdIn(linkedIdeaObjectIds);
+
+        return new IdeaWithTagsLinksDto(idea, tags, linkedIdeas);
     }
 }

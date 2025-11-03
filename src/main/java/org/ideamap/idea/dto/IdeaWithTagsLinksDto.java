@@ -2,13 +2,16 @@ package org.ideamap.idea.dto;
 
 import org.bson.types.ObjectId;
 import org.ideamap.idea.model.IdeaEntity;
+import org.ideamap.idea.model.IdeaProjection;
 import org.ideamap.idea.model.TagEntity;
 
 import java.util.List;
 
-public class IdeaWithTagsDto {
+public class IdeaWithTagsLinksDto {
     private String ideaId;
     private List<TagEntity> tags;
+
+    private List<IdeaProjection> linkedIdeas;
 
     private ObjectId userId;
 
@@ -20,12 +23,7 @@ public class IdeaWithTagsDto {
 
     private String image;
 
-    public IdeaWithTagsDto(String ideaId, List<TagEntity> tags) {
-        this.ideaId = ideaId;
-        this.tags = tags;
-    }
-
-    public IdeaWithTagsDto(IdeaEntity idea, List<TagEntity> tags) {
+    public IdeaWithTagsLinksDto(IdeaEntity idea, List<TagEntity> tags, List<IdeaProjection> linkedIdeas) {
         this.ideaId = idea.getIdAsString();
         this.image = idea.getImage();
         this.link = idea.getLink();
@@ -33,6 +31,7 @@ public class IdeaWithTagsDto {
         this.text = idea.getText();
         this.userId = idea.getUserId();
         this.tags = tags;
+        this.linkedIdeas = linkedIdeas;
     }
 
     public String getIdeaId() {
@@ -89,5 +88,13 @@ public class IdeaWithTagsDto {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<IdeaProjection> getLinkedIdeas() {
+        return linkedIdeas;
+    }
+
+    public void setLinkedIdeas(List<IdeaProjection> linkedIdeas) {
+        this.linkedIdeas = linkedIdeas;
     }
 }

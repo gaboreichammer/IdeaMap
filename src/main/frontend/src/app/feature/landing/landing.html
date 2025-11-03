@@ -23,8 +23,7 @@
               (click)="selectIdeaGroup(group)"
               [class.selected]="selectedIdeaGroup()?.id === group.id"
               class="group-item">
-            <span class="group-name">{{ group.name }}</span>
-            <span *ngIf="group.linkedIdeaId" class="tag linked-tag">Linked</span>
+            <span class="group-name text-3xl font-extrabold text-white-800">{{ group.name }}</span>
           </li>
         </ul>
 

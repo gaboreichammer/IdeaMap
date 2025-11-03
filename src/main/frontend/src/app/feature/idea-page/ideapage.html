@@ -18,14 +18,6 @@
     </app-rich-editor>
   </div>
 
-  <!-- Tags and Link -->
-  <div class="flex flex-wrap gap-2 text-sm mb-4">
-    <span *ngFor="let tag of idea.tags"
-          class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-medium border border-gray-200">
-      #{{ tag.name }}
-    </span>
-  </div>
-
   <a *ngIf="idea.link" [href]="idea.link" target="_blank"
      class="link-button mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -34,6 +26,24 @@
     </svg>
     View Original Source
   </a>
+
+  <!-- Tags and Link -->
+  <div class="flex flex-wrap gap-2 text-sm mb-4">
+    <span *ngFor="let tag of idea.tags"
+          class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-medium border border-gray-200">
+      #{{ tag.name }}
+    </span>
+  </div>
+
+  <div class="flex flex-wrap gap-2 text-sm mb-4">
+    <span *ngFor="let linkedIdea of idea.linkedIdeas">
+      <button
+            (click)="clickLinkedIdea(linkedIdea)"
+            class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150">
+      💡 {{ linkedIdea.name }}
+    </button>
+    </span>
+  </div>
 </div>
 
 <ng-template #noIdea>

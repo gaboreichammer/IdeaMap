@@ -97,7 +97,7 @@ tasks.register('copyFrontend', Copy) {
     into(layout.buildDirectory.dir('/resources/main/static'))
 }
 
-tasks.named('processResources') {
-    // Tell the processResources task to wait for the frontend files to be copied.
+tasks.named('bootJar') {
+    // Only build the frontend when creating the final JAR
     dependsOn tasks.named('copyFrontend')
 }

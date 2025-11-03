@@ -12,11 +12,17 @@ export interface Idea {
   link: string;
   image: string;
   linkedIdeaIds: string[];
-  tags: Tag [];
+  tags: Tag[];
   userId: string;
+  linkedIdeas: Idea[];
 }
 
 export interface Tag {
+  id: string;
+  name: string;
+}
+
+export interface IdeaLink {
   id: string;
   name: string;
 }

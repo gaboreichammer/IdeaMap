@@ -1,6 +1,6 @@
 package org.ideamap.idea;
 
-import org.ideamap.idea.dto.IdeaWithTagsDto;
+import org.ideamap.idea.dto.IdeaWithTagsLinksDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +22,8 @@ public class IdeaController {
      * @return A ResponseEntity containing the Idea or 404 Not Found.
      */
     @GetMapping("/linked/{ideaId}")
-    public ResponseEntity<IdeaWithTagsDto> getLinkedIdea(@PathVariable String ideaId) {
-        IdeaWithTagsDto ideaDto = ideaService.findIdeaWithTags(ideaId);
+    public ResponseEntity<IdeaWithTagsLinksDto> getLinkedIdea(@PathVariable String ideaId) {
+        IdeaWithTagsLinksDto ideaDto = ideaService.findIdeaWithTags(ideaId);
 
         if (ideaDto == null) {
             return ResponseEntity.notFound().build();
