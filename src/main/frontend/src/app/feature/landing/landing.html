@@ -23,7 +23,7 @@
               (click)="selectIdeaGroup(group)"
               [class.selected]="selectedIdeaGroup()?.id === group.id"
               class="group-item">
-            <span class="group-name text-3xl font-extrabold text-white-800">{{ group.name }}</span>
+            <span class="text-2xl font-extrabold text-white-800">{{ group.name }}</span>
           </li>
         </ul>
 
@@ -49,7 +49,7 @@
           <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
             <!-- Loading State -->
             <div *ngIf="isLoadingLinkedIdea()" class="text-center py-8 text-blue-600">
-              <p>Loading linked idea data...</p>
+              <p class="text-3xl">Loading linked idea data...</p>
               <!-- Simple Spin Icon (using inline SVG for portability) -->
               <svg class="animate-spin h-5 w-5 text-current mx-auto mt-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

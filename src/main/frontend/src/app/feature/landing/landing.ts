@@ -5,6 +5,10 @@ import { AuthService } from '../../services/auth.service';
 import { IdeaGroupService, IdeaGroup } from '../../services/idea-group.service';
 import { IdeaService, Idea } from '../../services/idea.service';
 import { Ideapage } from '../idea-page/ideapage';
+import { Observable, timer, combineLatest, of } from 'rxjs';
+import { finalize, switchMap, catchError } from 'rxjs/operators';
+
+const MIN_LOADING_TIME_MS = 500;
 
 @Component({
   selector: 'app-landing',
@@ -64,50 +68,64 @@ export class Landing implements OnInit {
     });
   }
 
-  /**
-   * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
-   * @param group The IdeaGroup selected by the user.
-   */
-  selectIdeaGroup(group: IdeaGroup): void {
-    // 1. Update the selected group signal
-    this.selectedIdeaGroup.set(group);
-    this.linkedIdea.set(null); // Clear previous idea
+ /**
+      * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
+      * @param group The IdeaGroup selected by the user.
+      */
+     selectIdeaGroup(group: IdeaGroup): void {
+         this.selectedIdeaGroup.set(group);
+         this.loadIdeaWithMinTime(group.linkedIdeaId);
+     }
 
-    const linkedId = group.linkedIdeaId;
+     /**
+      * Handles the event when an idea link is clicked inside the Ideapage component.
+      * @param ideaId The ID of the linked Idea to load.
+      */
+     onIdeaLinkClick(ideaId: string): void {
+         console.log(`Landingpage received new idea request for ID: ${ideaId}`);
+         this.loadIdeaWithMinTime(ideaId);
+     }
 
-    if (linkedId) {
+    /**
+     * Helper function to manage the loading process with a minimum display time.
+     * @param ideaId The ID of the idea to load.
+     */
+    private loadIdeaWithMinTime(ideaId: string | null): void {
+        this.linkedIdea.set(null); // Clear previous idea
         this.isLoadingLinkedIdea.set(true);
-        // 2. Fetch the linked Idea using the dedicated service and ID
-        this.ideaService.getIdeaById(linkedId).subscribe({
-            next: (idea) => {
+
+        if (!ideaId) {
+            this.isLoadingLinkedIdea.set(false);
+            return;
+        }
+
+        // 1. Define the Observable for the data fetch
+        // Use catchError to ensure the Observable completes gracefully even on error
+        const data$ = this.ideaService.getIdeaById(ideaId).pipe(
+            catchError((err) => {
+                console.error(`Failed to load linked Idea ${ideaId}:`, err);
+                return of(null as Idea | null); // Emit null on error
+            })
+        );
+
+        // 2. Define the Observable for the minimum time delay
+        const minTime$ = timer(MIN_LOADING_TIME_MS);
+
+        // 3. Wait for BOTH the data and the minimum time to complete
+        combineLatest([data$, minTime$]).pipe(
+            // The loading is finished when both observables have emitted their value
+            // We only need the first value (the idea data)
+            finalize(() => {
+                // Ensure the loading state is turned off regardless of success/error
+                this.isLoadingLinkedIdea.set(false);
+            })
+        ).subscribe({
+            next: ([idea, _]) => {
+                // The linkedIdea is updated only after the minimum time has passed
                 this.linkedIdea.set(idea);
-                this.isLoadingLinkedIdea.set(false);
-            },
-            error: (err) => {
-                console.error(`Failed to load linked Idea ${linkedId}:`, err);
-                this.linkedIdea.set(null);
-                this.isLoadingLinkedIdea.set(false);
             }
         });
     }
-  }
-
-  onIdeaLinkClick(ideaId: string) {
-    console.log(`Landingpage received new idea request for ID: ${ideaId}`);
-    this.isLoadingLinkedIdea.set(true);
-            // 2. Fetch the linked Idea using the dedicated service and ID
-            this.ideaService.getIdeaById(ideaId).subscribe({
-                next: (idea) => {
-                    this.linkedIdea.set(idea);
-                    this.isLoadingLinkedIdea.set(false);
-                },
-                error: (err) => {
-                    console.error(`Failed to load linked Idea ${ideaId}:`, err);
-                    this.linkedIdea.set(null);
-                    this.isLoadingLinkedIdea.set(false);
-                }
-            });
-  }
 
   /**
    * Clears the token and navigates the user back to the login screen.
