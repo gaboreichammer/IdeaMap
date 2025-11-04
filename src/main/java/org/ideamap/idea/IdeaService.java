@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IdeaService {
@@ -28,14 +30,17 @@ public class IdeaService {
                 "Idea with ID " + id + " not found"
         ));
 
-        List<ObjectId> tagObjectIds = idea.getTagIds().stream()
+        List<ObjectId> tagObjectIds = Optional.ofNullable(idea.getTagIds())
+                .orElseGet(Collections::emptyList)
+                .stream()
                 .filter(ObjectId::isValid)
                 .map(ObjectId::new)
                 .toList();
 
         List<TagEntity> tags = tagRepository.findAllById(tagObjectIds);
 
-        List<ObjectId> linkedIdeaObjectIds = idea.getLinkedIdeaIds().stream()
+        List<ObjectId> linkedIdeaObjectIds = Optional.ofNullable(idea.getLinkedIdeaIds())
+                .orElseGet(Collections::emptyList).stream()
                 .filter(ObjectId::isValid)
                 .map(ObjectId::new)
                 .toList();

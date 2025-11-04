@@ -92,6 +92,23 @@ export class Landing implements OnInit {
     }
   }
 
+  onIdeaLinkClick(ideaId: string) {
+    console.log(`Landingpage received new idea request for ID: ${ideaId}`);
+    this.isLoadingLinkedIdea.set(true);
+            // 2. Fetch the linked Idea using the dedicated service and ID
+            this.ideaService.getIdeaById(ideaId).subscribe({
+                next: (idea) => {
+                    this.linkedIdea.set(idea);
+                    this.isLoadingLinkedIdea.set(false);
+                },
+                error: (err) => {
+                    console.error(`Failed to load linked Idea ${ideaId}:`, err);
+                    this.linkedIdea.set(null);
+                    this.isLoadingLinkedIdea.set(false);
+                }
+            });
+  }
+
   /**
    * Clears the token and navigates the user back to the login screen.
    */

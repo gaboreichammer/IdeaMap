@@ -1,4 +1,4 @@
-import { Component, input, effect, signal } from '@angular/core'; // Import 'input'
+import { Component, input, effect, signal, output } from '@angular/core'; // Import 'input'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Idea, Tag, IdeaLink } from '../../services/idea.service';
@@ -14,6 +14,10 @@ import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.compon
 export class Ideapage {
   // Read-only input from the parent component
   linkedIdea = input<Idea | null>(null);
+
+  // **1. Define the output signal**
+  // Emits the ID of the IdeaLink when clicked
+  ideaClicked = output<string>();
 
   // Writable local signal to hold the idea data for editing
   editableIdea = signal<Idea | null>(null);
@@ -45,5 +49,6 @@ export class Ideapage {
 
   clickLinkedIdea(clickedIdea: IdeaLink) {
     console.log('idea clicked:', clickedIdea.id);
+    this.ideaClicked.emit(clickedIdea.id)
   }
 }
