@@ -9,6 +9,12 @@ import { Observable, timer, combineLatest, of } from 'rxjs';
 import { finalize, switchMap, catchError } from 'rxjs/operators';
 
 const MIN_LOADING_TIME_MS = 500;
+const MAX_BREADCRUMBS = 10;
+
+export interface Breadcrumb {
+  id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-landing',
@@ -25,6 +31,7 @@ export class Landing implements OnInit {
 
   username = signal<string>('');
   ideaGroups = signal<IdeaGroup[]>([]);
+  breadcrumbs = signal<Breadcrumb[]>([]);
 
   // State for the currently selected Idea Group
   selectedIdeaGroup = signal<IdeaGroup | null>(null);
@@ -121,11 +128,41 @@ export class Landing implements OnInit {
             })
         ).subscribe({
             next: ([idea, _]) => {
-                // The linkedIdea is updated only after the minimum time has passed
+                // Check if idea is valid before proceeding
+                if (!idea) {
+                  this.linkedIdea.set(null);
+                  return;
+                }
+
                 this.linkedIdea.set(idea);
+
+                const newBreadcrumb: Breadcrumb = {
+                    id: idea.id,
+                    name: idea.name
+                  };
+
+                this.breadcrumbs.update(currentBreadcrumbs => {
+                  // Create the new array by spreading the existing items
+                  let updatedBreadcrumbs = [
+                    ...currentBreadcrumbs,
+                    newBreadcrumb
+                  ];
+
+                  // If the new array exceeds the max size, remove the oldest (first) item
+                  if (updatedBreadcrumbs.length > MAX_BREADCRUMBS) {
+                    // .slice(1) returns a new array starting from the second element (index 1)
+                    updatedBreadcrumbs = updatedBreadcrumbs.slice(1);
+                  }
+
+                  return updatedBreadcrumbs;
+                });
             }
         });
     }
+
+  clickedBreadcrumb(clickedBreadcrumb: Breadcrumb) {
+    console.log(`Breadcrumb clicked: ${clickedBreadcrumb.name}`);
+  }
 
   /**
    * Clears the token and navigates the user back to the login screen.

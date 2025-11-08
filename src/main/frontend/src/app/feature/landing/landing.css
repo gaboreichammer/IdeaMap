@@ -19,16 +19,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-}
-
-.user-info span {
-    /* Adding a reliable margin-right of 1.5rem (24px) */
-    margin-right: 1.5rem;
-}
-
 .logout-button {
     background-color: #f59e0b; /* Amber */
     color: white;
@@ -51,15 +41,8 @@
     margin: 0 auto;
 }
 
-.dashboard-layout {
-    display: flex;
-    gap: 2rem;
-}
-
 /* Left Sidebar (Idea Group List) */
 .sidebar {
-    width: 300px;
-    flex-shrink: 0;
     background-color: white;
     border-radius: 0.75rem;
     padding: 1.5rem;
@@ -116,11 +99,6 @@
     background-color: #3b82f6; /* Blue tag */
     color: white;
     font-weight: 500;
-}
-
-/* Right Column (Details) */
-.details-area {
-    flex-grow: 1;
 }
 
 .data-area-placeholder {
