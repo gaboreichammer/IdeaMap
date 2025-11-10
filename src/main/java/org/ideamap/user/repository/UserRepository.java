@@ -1,4 +1,5 @@
-package org.ideamap.user;
+package org.ideamap.user.repository;
+import org.ideamap.user.MongoUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

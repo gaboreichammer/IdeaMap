@@ -1,4 +1,4 @@
-package org.ideamap.idea;
+package org.ideamap.idea.repository;
 
 import org.bson.types.ObjectId;
 import org.ideamap.idea.model.TagEntity;

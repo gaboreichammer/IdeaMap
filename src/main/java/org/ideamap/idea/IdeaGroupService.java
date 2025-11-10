@@ -3,6 +3,7 @@ package org.ideamap.idea;
 
 import org.bson.types.ObjectId;
 import org.ideamap.idea.model.IdeaGroupEntity;
+import org.ideamap.idea.repository.IdeaGroupRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

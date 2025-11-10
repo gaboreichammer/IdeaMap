@@ -5,6 +5,8 @@ import org.ideamap.idea.dto.IdeaWithTagsLinksDto;
 import org.ideamap.idea.model.IdeaEntity;
 import org.ideamap.idea.model.IdeaProjection;
 import org.ideamap.idea.model.TagEntity;
+import org.ideamap.idea.repository.IdeaRepository;
+import org.ideamap.idea.repository.TagRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

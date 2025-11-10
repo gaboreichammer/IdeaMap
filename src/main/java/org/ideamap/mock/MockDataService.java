@@ -1,13 +1,13 @@
 package org.ideamap.mock;
 import org.bson.types.ObjectId;
-import org.ideamap.idea.IdeaGroupRepository;
-import org.ideamap.idea.IdeaRepository;
-import org.ideamap.idea.TagRepository;
+import org.ideamap.idea.repository.IdeaGroupRepository;
+import org.ideamap.idea.repository.IdeaRepository;
+import org.ideamap.idea.repository.TagRepository;
 import org.ideamap.idea.model.IdeaEntity;
 import org.ideamap.idea.model.IdeaGroupEntity;
 import org.ideamap.idea.model.TagEntity;
 import org.ideamap.user.MongoUser;
-import org.ideamap.user.UserRepository;
+import org.ideamap.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
