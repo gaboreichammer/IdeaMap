@@ -44,17 +44,25 @@ public class MockDataService {
             // 1. Create and persist users
             MongoUser admin = createMockUsers();
 
+            //
+            IdeaGroupEntity javaGroup = createMockIdeaGroup("Java", admin);
+            IdeaGroupEntity netGroup = createMockIdeaGroup(".NET", admin);
+
             // 2. Create and persist tags
             List<String> javaTags = createMockJavaTags();
             List<String> dotNetTags = createMockDotNetTags(); // New .NET tags
 
             // 3. Create and link ideas (Java and .NET)
-            IdeaEntity mainJavaIdea = createMockJavaIdeas(admin, javaTags);
-            IdeaEntity mainDotNetIdea = createMockDotNetIdeas(admin, dotNetTags); // New .NET ideas
+            IdeaEntity mainJavaIdea = createMockJavaIdeas(admin, javaTags, javaGroup.getId().toString());
+            IdeaEntity mainDotNetIdea = createMockDotNetIdeas(admin, dotNetTags, netGroup.getId().toString()); // New .NET ideas
 
             // 4. Create idea groups using the ideas
-            createMockIdeaGroup("Java", admin, mainJavaIdea);
-            createMockIdeaGroup(".NET", admin, mainDotNetIdea); // New .NET group
+            //update idea groups here
+            javaGroup.setLinkedIdeaId(mainJavaIdea.getId().toString());
+            ideaGroupRepository.save(javaGroup);
+
+            netGroup.setLinkedIdeaId(mainDotNetIdea.getId().toString());
+            ideaGroupRepository.save(netGroup);
 
             System.out.println("   -> Successfully completed mock data insertion.");
         } else {
@@ -93,13 +101,14 @@ public class MockDataService {
 
     // --- JAVA IDEAS ---
 
-    private IdeaEntity createMockJavaIdeas(MongoUser user, List<String> tagIds) {
+    private IdeaEntity createMockJavaIdeas(MongoUser user, List<String> tagIds, String javaGroupId) {
         ObjectId userId = user != null ? user.getId() : null;
         List<String> linkedIds = new ArrayList<>();
 
         // 1. Linked Idea: Configuration Annotation (Existing)
         IdeaEntity configAnnotation = new IdeaEntity("Configuration Annotation");
         configAnnotation.setUserId(userId);
+        configAnnotation.setIdeaGroupId(javaGroupId);
         configAnnotation.setText("The @Configuration annotation, applied at the <b>class level</b>, " +
                 "serves as the blueprint for " +
                 "the Spring IoC (Inversion of Control) Container, telling it how to create, " +
@@ -110,6 +119,7 @@ public class MockDataService {
         // 2. Linked Idea: Bean Annotation (New)
         IdeaEntity beanAnnotation = new IdeaEntity("Bean Annotation");
         beanAnnotation.setUserId(userId);
+        beanAnnotation.setIdeaGroupId(javaGroupId);
         beanAnnotation.setText("The @Bean annotation is used on methods in a @Configuration class. " +
                 "It tells Spring to execute this method and register the returned object as a bean in the application context.");
         IdeaEntity savedBeanAnnotation = ideaRepository.save(beanAnnotation);
@@ -118,6 +128,7 @@ public class MockDataService {
         // 3. Linked Idea: Autowired Annotation (New)
         IdeaEntity autowiredAnnotation = new IdeaEntity("Autowired Annotation");
         autowiredAnnotation.setUserId(userId);
+        autowiredAnnotation.setIdeaGroupId(javaGroupId);
         autowiredAnnotation.setText("The @Autowired annotation is used for automatic dependency injection. " +
                 "It can be used on fields, constructors, or setter methods.");
         IdeaEntity savedAutowiredAnnotation = ideaRepository.save(autowiredAnnotation);
@@ -125,6 +136,7 @@ public class MockDataService {
 
         // 4. Main Idea: Main Method (Existing logic but with more links)
         IdeaEntity mainMethod = getIdeaEntity(tagIds, userId, linkedIds);
+        mainMethod.setIdeaGroupId(javaGroupId);
         return ideaRepository.save(mainMethod);
     }
 
@@ -143,13 +155,14 @@ public class MockDataService {
 
     // --- .NET IDEAS (NEW SECTION) ---
 
-    private IdeaEntity createMockDotNetIdeas(MongoUser user, List<String> tagIds) {
+    private IdeaEntity createMockDotNetIdeas(MongoUser user, List<String> tagIds, String netGroupId) {
         ObjectId userId = user != null ? user.getId() : null;
         List<String> linkedIds = new ArrayList<>();
 
         // 1. Linked Idea: Core CLI (New .NET linked idea)
         IdeaEntity cliIdea = new IdeaEntity(".NET Core CLI");
         cliIdea.setUserId(userId);
+        cliIdea.setIdeaGroupId(netGroupId);
         cliIdea.setText("The .NET Core Command-Line Interface (CLI) is a cross-platform tool " +
                 "for developing, building, running, and managing .NET projects. " +
                 "Commands include <b>'dotnet new'</b> and <b>'dotnet run'</b>.");
@@ -159,6 +172,7 @@ public class MockDataService {
         // 2. Linked Idea: ASP.NET Core MVC (New .NET linked idea)
         IdeaEntity mvcIdea = new IdeaEntity("ASP.NET Core MVC");
         mvcIdea.setUserId(userId);
+        mvcIdea.setIdeaGroupId(netGroupId);
         mvcIdea.setText("ASP.NET Core MVC is a framework for building web apps and APIs using the Model-View-Controller pattern. " +
                 "It separates the application into three main components.");
         IdeaEntity savedMvcIdea = ideaRepository.save(mvcIdea);
@@ -167,6 +181,7 @@ public class MockDataService {
         // 3. Linked Idea: Entity Framework (New .NET linked idea)
         IdeaEntity efIdea = new IdeaEntity("Entity Framework Core");
         efIdea.setUserId(userId);
+        efIdea.setIdeaGroupId(netGroupId);
         efIdea.setText("EF Core is an object-relational mapper (ORM) for .NET. " +
                 "It enables developers to work with a database using .NET objects, eliminating the need for most data-access code.");
         IdeaEntity savedEfIdea = ideaRepository.save(efIdea);
@@ -174,6 +189,7 @@ public class MockDataService {
 
         // 4. Main .NET Idea
         IdeaEntity mainDotNetIdea = new IdeaEntity("Program.cs Entry Point");
+        mainDotNetIdea.setIdeaGroupId(netGroupId);
         mainDotNetIdea.setText("In modern .NET applications, the <b>Program.cs</b> file contains the entry point for the application. " +
                 "It typically uses a top-level statement structure to configure the host, services, and middleware.");
         mainDotNetIdea.setTagIds(tagIds);
@@ -185,8 +201,10 @@ public class MockDataService {
 
     // --- IDEA GROUP CREATION ---
 
-    private void createMockIdeaGroup(String groupName, MongoUser user, IdeaEntity idea) {
-        IdeaGroupEntity newGroup = new IdeaGroupEntity(groupName, idea.getIdAsString(), user.getId());
+    private IdeaGroupEntity createMockIdeaGroup(String groupName, MongoUser user) {
+        IdeaGroupEntity newGroup = new IdeaGroupEntity(groupName, user.getId());
         ideaGroupRepository.save(newGroup);
+
+        return ideaGroupRepository.findByName(groupName);
     }
 }

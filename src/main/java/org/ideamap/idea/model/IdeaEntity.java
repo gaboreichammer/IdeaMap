@@ -20,6 +20,8 @@ public class IdeaEntity {
 
     private String link;
 
+    private String ideaGroupId;
+
     private String image;
 
     // List of linked ideas: You should store the IDs of the linked Idea documents.
@@ -35,7 +37,7 @@ public class IdeaEntity {
         this.name = name;
     }
 
-    public IdeaEntity(String name, String text, String link, String image, List<String> linkedIdeaIds, List<String> tagIds, ObjectId userId) {
+    public IdeaEntity(String name, String text, String link, String image, List<String> linkedIdeaIds, List<String> tagIds, ObjectId userId, String ideaGroupId) {
         this.name = name;
         this.text = text;
         this.link = link;
@@ -43,6 +45,7 @@ public class IdeaEntity {
         this.linkedIdeaIds = linkedIdeaIds;
         this.tagIds = tagIds;
         this.userId = userId;
+        this.ideaGroupId = ideaGroupId;
     }
 
     public ObjectId getId() {
@@ -107,5 +110,13 @@ public class IdeaEntity {
 
     public void setUserId(ObjectId userId) {
         this.userId = userId;
+    }
+
+    public String getIdeaGroupId() {
+        return ideaGroupId;
+    }
+
+    public void setIdeaGroupId(String ideaGroupId) {
+        this.ideaGroupId = ideaGroupId;
     }
 }

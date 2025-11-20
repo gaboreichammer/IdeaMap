@@ -13,6 +13,8 @@ const MAX_BREADCRUMBS = 10;
 
 export interface Breadcrumb {
   id: string;
+  groupId: string;
+  groupName: string;
   name: string;
 }
 
@@ -57,7 +59,6 @@ export class Landing implements OnInit {
   fetchIdeaGroups(): void {
     this.ideaGroupService.getIdeaGroupsForCurrentUser().subscribe({
         next: (groups) => {
-            console.log('Idea Groups loaded:', groups);
             this.ideaGroups.set(groups);
 
             // Optionally select the first item on load
@@ -89,7 +90,6 @@ export class Landing implements OnInit {
       * @param ideaId The ID of the linked Idea to load.
       */
      onIdeaLinkClick(ideaId: string): void {
-         console.log(`Landingpage received new idea request for ID: ${ideaId}`);
          this.loadIdeaWithMinTime(ideaId);
      }
 
@@ -128,40 +128,65 @@ export class Landing implements OnInit {
             })
         ).subscribe({
             next: ([idea, _]) => {
-                // Check if idea is valid before proceeding
-                if (!idea) {
-                  this.linkedIdea.set(null);
-                  return;
-                }
-
-                this.linkedIdea.set(idea);
-
-                const newBreadcrumb: Breadcrumb = {
-                    id: idea.id,
-                    name: idea.name
-                  };
-
-                this.breadcrumbs.update(currentBreadcrumbs => {
-                  // Create the new array by spreading the existing items
-                  let updatedBreadcrumbs = [
-                    ...currentBreadcrumbs,
-                    newBreadcrumb
-                  ];
-
-                  // If the new array exceeds the max size, remove the oldest (first) item
-                  if (updatedBreadcrumbs.length > MAX_BREADCRUMBS) {
-                    // .slice(1) returns a new array starting from the second element (index 1)
-                    updatedBreadcrumbs = updatedBreadcrumbs.slice(1);
-                  }
-
-                  return updatedBreadcrumbs;
-                });
+               this.loadIdeaAndBreadcrumbs(idea);
             }
         });
     }
 
   clickedBreadcrumb(clickedBreadcrumb: Breadcrumb) {
-    console.log(`Breadcrumb clicked: ${clickedBreadcrumb.name}`);
+    this.loadIdeaWithMinTime(clickedBreadcrumb.id);
+
+    //Find the IdeaGroup that matches the new Idea's ideaGroupId
+    const matchingGroup = this.ideaGroups().find(
+        group => group.id === clickedBreadcrumb.groupId
+    );
+
+    //Update the selectedIdeaGroup signal if a match is found
+    if (matchingGroup) {
+      this.selectedIdeaGroup.set(matchingGroup);
+     }
+  }
+
+  loadIdeaAndBreadcrumbs(idea: Idea | null) {
+     // Check if idea is valid before proceeding
+      if (!idea) {
+        this.linkedIdea.set(null);
+        return;
+      }
+
+      this.linkedIdea.set(idea);
+
+      const matchingGroup = this.ideaGroups().find(
+        group => group.id === idea.ideaGroupId
+      );
+
+      if(matchingGroup) {
+      const newBreadcrumb: Breadcrumb = {
+          id: idea.id,
+          groupId: matchingGroup.id,
+          groupName: matchingGroup.name,
+          name: idea.name
+        };
+
+      this.breadcrumbs.update(currentBreadcrumbs => {
+      // Filter out the current version of the new breadcrumb (if it exists)
+      // This removes the duplicate while keeping the other items in order.
+       let updatedBreadcrumbs = currentBreadcrumbs.filter(
+         b => b.id !== newBreadcrumb.id
+       );
+
+       //Add the NEW version of the breadcrumb to the end
+       updatedBreadcrumbs.push(newBreadcrumb);
+
+        // If the new array exceeds the max size, remove the oldest (first) item
+        if (updatedBreadcrumbs.length > MAX_BREADCRUMBS) {
+          // .slice(1) returns a new array starting from the second element (index 1)
+          updatedBreadcrumbs = updatedBreadcrumbs.slice(1);
+        }
+
+        return updatedBreadcrumbs;
+      });
+    }
   }
 
   /**

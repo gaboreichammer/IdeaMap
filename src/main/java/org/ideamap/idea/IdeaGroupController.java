@@ -1,5 +1,7 @@
 package org.ideamap.idea;
 
+import org.ideamap.idea.dto.IdeaGroupDto;
+import org.ideamap.idea.mappers.IdeaGroupMapper;
 import org.ideamap.idea.model.IdeaGroupEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,9 +15,11 @@ import java.util.List;
 public class IdeaGroupController {
 
     private final IdeaGroupService ideaGroupService;
+    private final IdeaGroupMapper ideaGroupMapper;
 
-    public IdeaGroupController(IdeaGroupService ideaGroupService) {
+    public IdeaGroupController(IdeaGroupService ideaGroupService, IdeaGroupMapper ideaGroupMapper) {
         this.ideaGroupService = ideaGroupService;
+        this.ideaGroupMapper = ideaGroupMapper;
     }
 
     /**
@@ -25,7 +29,7 @@ public class IdeaGroupController {
      * @return A ResponseEntity containing a list of IdeaGroup entities (may be empty).
      */
     @GetMapping("/getIdeaGroup")
-    public ResponseEntity<List<IdeaGroupEntity>> getIdeaGroup(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<IdeaGroupDto>> getIdeaGroup(@AuthenticationPrincipal Jwt jwt) {
         // Retrieve the custom 'userId' claim that was embedded during token generation.
         String userIdString = jwt.getClaimAsString("userId");
 
@@ -39,7 +43,10 @@ public class IdeaGroupController {
         // Use the extracted user ID to query the database
         List<IdeaGroupEntity> ideaGroupEntities = ideaGroupService.getIdeaGroupForUser(userIdString);
 
+        // 4. Use the mapper to transform the list of Entities into a list of DTOs
+        List<IdeaGroupDto> ideaGroupDtos = ideaGroupMapper.toDtoList(ideaGroupEntities);
+
         // Best Practice: Return 200 OK even if the list is empty, indicating a successful query
-        return ResponseEntity.ok(ideaGroupEntities);
+        return ResponseEntity.ok(ideaGroupDtos);
     }
 }

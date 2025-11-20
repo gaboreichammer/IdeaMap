@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 // The Idea structure mirrors the backend Idea model fields
 export interface Idea {
   id: string;
+  ideaGroupId: string;
   name: string;
   text: string;
   link: string;

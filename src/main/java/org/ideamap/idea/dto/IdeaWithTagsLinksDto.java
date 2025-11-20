@@ -8,7 +8,9 @@ import org.ideamap.idea.model.TagEntity;
 import java.util.List;
 
 public class IdeaWithTagsLinksDto {
-    private String ideaId;
+    private String id;
+
+    private String ideaGroupId;
     private List<TagEntity> tags;
 
     private List<IdeaProjection> linkedIdeas;
@@ -24,7 +26,7 @@ public class IdeaWithTagsLinksDto {
     private String image;
 
     public IdeaWithTagsLinksDto(IdeaEntity idea, List<TagEntity> tags, List<IdeaProjection> linkedIdeas) {
-        this.ideaId = idea.getIdAsString();
+        this.id = idea.getIdAsString();
         this.image = idea.getImage();
         this.link = idea.getLink();
         this.name = idea.getName();
@@ -32,14 +34,15 @@ public class IdeaWithTagsLinksDto {
         this.userId = idea.getUserId();
         this.tags = tags;
         this.linkedIdeas = linkedIdeas;
+        this.ideaGroupId = idea.getIdeaGroupId();
     }
 
-    public String getIdeaId() {
-        return ideaId;
+    public String getId() {
+        return id;
     }
 
-    public void setIdeaId(String ideaId) {
-        this.ideaId = ideaId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public List<TagEntity> getTags() {
@@ -96,5 +99,13 @@ public class IdeaWithTagsLinksDto {
 
     public void setLinkedIdeas(List<IdeaProjection> linkedIdeas) {
         this.linkedIdeas = linkedIdeas;
+    }
+
+    public String getIdeaGroupId() {
+        return ideaGroupId;
+    }
+
+    public void setIdeaGroupId(String ideaGroupId) {
+        this.ideaGroupId = ideaGroupId;
     }
 }

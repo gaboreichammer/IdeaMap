@@ -29,6 +29,11 @@ public class IdeaGroupEntity {
         this.userId = userId;
     }
 
+    public IdeaGroupEntity(String name, ObjectId userId) {
+        this.name = name;
+        this.userId = userId;
+    }
+
     public ObjectId getId() {
         return id;
     }
