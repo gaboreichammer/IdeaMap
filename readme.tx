@@ -1,36 +1,16 @@
-#####################################
-Project setup steps:
-#####################################
+Angular version 20.3.8
+Tailwindcss/postcss": 4.1.16
 
-- create new project in intelliJ
-- import spring boot in build.gradle
-- create application.properties
-(reload gradle build regularly)
-
-
+###################################
+Install MongoDB compass to view data
 ##################################
-Spring flow:
-##################################
-
-To create a table in the database that Spring can manage, you need to define a JPA (Java Persistence API) Entity.
-An entity is a simple Java class annotated with @Entity that maps directly to a database table.
-Spring Boot, using a tool called Hibernate, will automatically read this class and generate the corresponding SQL
-to create the table for you in the H2 database.
-
-To query the database, you don't write SQL by hand.
-Instead, you create a Repository.
-This is an interface that extends one of Spring Data JPA's repository interfaces.
-Spring will automatically implement all the basic database operations (find, save, delete) for you
-
-Setting up the microservice:
-This involves creating a REST Controller to expose an API endpoint (e.g., /login)
-and a Service class to handle the business logic of checking the username and password.
+https://www.mongodb.com/products/tools/compass
 
 ###################################
 Test user service
 ##################################
 
-curl.exe -X POST http://localhost:8080/api/users/login -H "Content-Type: application/json" -d '{\"username\": \"admin\", \"password\": \"password123\"}'
+curl.exe -X POST http://localhost:8080/api/users/login -H "Content-Type: application/json" -d '{\"username\": \"admin\", \"password\": \"*******\"}'
 
 ###############################
 How to start frontend server:
@@ -40,47 +20,6 @@ in the terminal go into src/main/frontend!
 ng serve
 
 
-###############################
-add angular to a spring project
-###############################
-
-Download and install node.js https://nodejs.org/en/download
-
-verify it works in a powershell command line:
-node -v
-npm -v
-
-Add com.github.node-gradle.node to build gradle (node.js gradle plugin!)
-Added node section to my build.gradle file
-
-Install angular/cli with the following command from intelliJ console:
-npm install -g @angular/cli
-
-Creating an angular project from intelliJ command line:
-ng new angular-ui --directory .
-
-The absence of an app.module.ts file confirms you are using the standalone components API, which is the default for new
-Angular projects since version 17 (and is common practice with recent Node.js versions like 22).
-
-Created a standalone login component.
-
-app.ts + app.html is our main app component, the html part contains only:
-<app-login></app-login>
-
-app.routes.ts needed to contain a route to login:
-
-  path: '',
-    component: Login,
-    title: 'Login'
-
-created a sevices folder and an auth.service.ts that uses an injectable HttpClient
-
-this HttpClient needs to be added to app.config.ts as a provider
-
-providers: [
-...
-provideHttpClient()
-]
 
 
 
