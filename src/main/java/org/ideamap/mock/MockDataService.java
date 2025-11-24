@@ -113,6 +113,7 @@ public class MockDataService {
                 "serves as the blueprint for " +
                 "the Spring IoC (Inversion of Control) Container, telling it how to create, " +
                 "configure, and assemble the beans for your application.\n");
+        configAnnotation.setLink("https://en.wikipedia.org/wiki/Java_annotation");
         IdeaEntity savedConfigAnnotation = ideaRepository.save(configAnnotation);
         linkedIds.add(savedConfigAnnotation.getIdAsString());
 

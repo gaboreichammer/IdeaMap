@@ -13,17 +13,20 @@
   </header>
 
   <main class="content">
-    <div class="grid grid-cols-13 gap-6">
+    <div class="grid grid-cols-29 gap-6">
 
       <!-- Left Column: Idea Group List -->
-      <div class="col-span-3 sidebar shadow-lg rounded-xl">
+      <div class="col-span-5 sidebar shadow-lg rounded-xl">
         <ul *ngIf="ideaGroups().length > 0; else noGroups" class="group-list">
           <!-- Iterate over the fetched groups -->
           <li *ngFor="let group of ideaGroups()"
               (click)="selectIdeaGroup(group)"
-              [class.selected]="selectedIdeaGroup()?.id === group.id"
+              [class.selected]="selectedIdeaGroup()?.id === group.id && !isAddingNewIdeaGroup()"
               class="group-item">
             <span class="text-2xl font-extrabold text-white-800">{{ group.name }}</span>
+          </li>
+          <li class="group-item" (click)="addNewIdeaGroup()" [class.selected]="isAddingNewIdeaGroup()">
+            <span class="text-2xl font-extrabold text-white-800"> + </span>
           </li>
         </ul>
 
@@ -33,7 +36,7 @@
       </div>
 
       <!-- Right Column: Details/Main Content -->
-      <div class="col-span-7">
+      <div class="col-span-19">
 
         <!-- Case 1: No group selected -->
         <ng-container *ngIf="!selectedIdeaGroup()">
@@ -44,26 +47,36 @@
         </ng-container>
 
         <!-- Case 2: Group selected -->
-        <ng-container *ngIf="selectedIdeaGroup() as group">
-          <!-- Linked Idea Content -->
-          <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
-            <!-- Loading State -->
-            <div *ngIf="isLoadingLinkedIdea()" class="text-center py-8 text-blue-600 min-h-96 flex flex-col justify-center items-center">
-              <p class="text-3xl">Loading linked idea data...</p>
-              <!-- Simple Spin Icon (using inline SVG for portability) -->
-              <svg class="animate-spin h-5 w-5 text-current mx-auto mt-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
+        <ng-container *ngIf="!isAddingNewIdeaGroup()">
+          <ng-container *ngIf="selectedIdeaGroup() as group">
+            <!-- Linked Idea Content -->
+            <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
+              <!-- Loading State -->
+              <div *ngIf="isLoadingLinkedIdea()" class="text-center py-8 text-blue-600 min-h-96 flex flex-col justify-center items-center">
+                <p class="text-3xl">Loading linked idea data...</p>
+                <!-- Simple Spin Icon (using inline SVG for portability) -->
+                <svg class="animate-spin h-5 w-5 text-current mx-auto mt-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </div>
+              <ideapage *ngIf="!isLoadingLinkedIdea()" [linkedIdea]="linkedIdea()" (ideaClicked)="onIdeaLinkClick($event)"></ideapage>
             </div>
-            <ideapage *ngIf="!isLoadingLinkedIdea()" [linkedIdea]="linkedIdea()" (ideaClicked)="onIdeaLinkClick($event)"></ideapage>
-          </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="isAddingNewIdeaGroup()">
+            <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
+              <div class="p-6 bg-white shadow-xl rounded-xl">
+                Add new Idea Group
+              </div>
+            </div>
         </ng-container>
 
       </div>
 
       <!-- Breadcrumbs -->
-      <div class="col-span-3 flex flex-col space-y-3 p-4 bg-white shadow-lg rounded-xl">
+      <div class="col-span-5 flex flex-col space-y-3 p-4 bg-white shadow-lg rounded-xl">
         <h3 class="text-xl font-bold text-gray-700 mt-2">🍞 Breadcrumbs</h3>
         <span *ngFor="let breadcrumb of breadcrumbs()" class="block w-full">
           <button
