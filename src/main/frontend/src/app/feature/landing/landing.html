@@ -13,30 +13,27 @@
   </header>
 
   <main class="content">
-    <div class="grid grid-cols-29 gap-6">
+    <div class="grid grid-cols-12 gap-6">
 
       <!-- Left Column: Idea Group List -->
-      <div class="col-span-5 sidebar shadow-lg rounded-xl">
-        <ul *ngIf="ideaGroups().length > 0; else noGroups" class="group-list">
-          <!-- Iterate over the fetched groups -->
-          <li *ngFor="let group of ideaGroups()"
-              (click)="selectIdeaGroup(group)"
-              [class.selected]="selectedIdeaGroup()?.id === group.id && !isAddingNewIdeaGroup()"
-              class="group-item">
-            <span class="text-2xl font-extrabold text-white-800">{{ group.name }}</span>
-          </li>
+      <div class="col-span-2 sidebar shadow-lg rounded-xl">
+        <ul class="group-list">
+          <ng-container *ngIf="ideaGroups().length > 0">
+            <li *ngFor="let group of ideaGroups()"
+                (click)="selectIdeaGroup(group)"
+                [class.selected]="selectedIdeaGroup()?.id === group.id && !isAddingNewIdeaGroup()"
+                class="group-item">
+              <span class="text-2xl font-extrabold text-white-800">{{ group.name }}</span>
+            </li>
+          </ng-container>
           <li class="group-item" (click)="addNewIdeaGroup()" [class.selected]="isAddingNewIdeaGroup()">
             <span class="text-2xl font-extrabold text-white-800"> + </span>
           </li>
         </ul>
-
-        <ng-template #noGroups>
-          <p class="text-gray-500 italic">No idea groups found yet. Time to create one!</p>
-        </ng-template>
       </div>
 
       <!-- Right Column: Details/Main Content -->
-      <div class="col-span-19">
+      <div class="col-span-8">
 
         <!-- Case 1: No group selected -->
         <ng-container *ngIf="!selectedIdeaGroup()">
@@ -76,7 +73,7 @@
       </div>
 
       <!-- Breadcrumbs -->
-      <div class="col-span-5 flex flex-col space-y-3 p-4 bg-white shadow-lg rounded-xl">
+      <div class="col-span-2 flex flex-col space-y-3 p-4 bg-white shadow-lg rounded-xl">
         <h3 class="text-xl font-bold text-gray-700 mt-2">🍞 Breadcrumbs</h3>
         <span *ngFor="let breadcrumb of breadcrumbs()" class="block w-full">
           <button

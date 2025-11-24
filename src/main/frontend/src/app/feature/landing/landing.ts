@@ -77,10 +77,10 @@ export class Landing implements OnInit {
     });
   }
 
-      /**
-      * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
-      * @param group The IdeaGroup selected by the user.
-      */
+    /**
+     * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
+     * @param group The IdeaGroup selected by the user.
+     */
      selectIdeaGroup(group: IdeaGroup): void {
          this.selectedIdeaGroup.set(group);
          this.loadIdeaWithMinTime(group.linkedIdeaId);
