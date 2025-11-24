@@ -40,6 +40,7 @@ export class Landing implements OnInit {
   // State for the Idea linked to the selected Idea Group
   linkedIdea = signal<Idea | null>(null);
   isLoadingLinkedIdea = signal<boolean>(false);
+  isAddingNewIdeaGroup = signal<boolean>(false);
 
   ngOnInit(): void {
     // Attempt to retrieve and display the username upon loading
@@ -76,10 +77,10 @@ export class Landing implements OnInit {
     });
   }
 
- /**
-      * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
-      * @param group The IdeaGroup selected by the user.
-      */
+    /**
+     * Handles selecting an IdeaGroup from the list and fetches its linked Idea.
+     * @param group The IdeaGroup selected by the user.
+     */
      selectIdeaGroup(group: IdeaGroup): void {
          this.selectedIdeaGroup.set(group);
          this.loadIdeaWithMinTime(group.linkedIdeaId);
@@ -98,6 +99,7 @@ export class Landing implements OnInit {
      * @param ideaId The ID of the idea to load.
      */
     private loadIdeaWithMinTime(ideaId: string | null): void {
+        this.isAddingNewIdeaGroup.set(false);
         this.linkedIdea.set(null); // Clear previous idea
         this.isLoadingLinkedIdea.set(true);
 
@@ -187,6 +189,10 @@ export class Landing implements OnInit {
         return updatedBreadcrumbs;
       });
     }
+  }
+
+  addNewIdeaGroup() {
+    this.isAddingNewIdeaGroup.set(true);
   }
 
   /**

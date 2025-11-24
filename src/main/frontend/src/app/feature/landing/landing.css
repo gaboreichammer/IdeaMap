@@ -37,7 +37,7 @@
 /* --- Dashboard Layout --- */
 .content {
     padding: 2rem;
-    max-width: 1400px; /* Increased max width for better dashboard look */
+    max-width: 1600px; /* Increased max width for better dashboard look */
     margin: 0 auto;
 }
 
