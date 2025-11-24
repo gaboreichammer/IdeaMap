@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { Login } from './feature/login/login'; // Assuming your login component is named Login
-import { Landing } from './feature/landing/landing'; // Import the new landing component
+import { Login } from './feature/login/login';
+import { Landing } from './feature/landing/landing';
 import { Ideapage } from './feature/idea-page/ideapage';
 
 export const routes: Routes = [
