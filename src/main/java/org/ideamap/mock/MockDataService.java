@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service // 👈 Mark this as a Spring service
+@Service
 public class MockDataService {
 
     private final UserRepository userRepository;

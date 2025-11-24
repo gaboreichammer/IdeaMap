@@ -36,7 +36,12 @@ export class Ideapage {
     });
   }
 
-  // Example method to simulate saving the data back to the backend
+  /**
+   * Saves the currently edited idea.
+   *
+   * This method currently simulates saving by logging the idea content and showing an alert.
+   * In a real application, replace this with a call to the idea service to persist changes.
+   */
   saveIdea() {
     const dataToSave = this.editableIdea();
     if (dataToSave) {

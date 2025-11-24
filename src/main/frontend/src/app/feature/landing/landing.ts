@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { IdeaGroupService, IdeaGroup } from '../../services/idea-group.service';
 import { IdeaService, Idea } from '../../services/idea.service';
+import { IdeaGroupNew } from '../idea-group-new/ideaGroupNew';
 import { Ideapage } from '../idea-page/ideapage';
 import { Observable, timer, combineLatest, of } from 'rxjs';
 import { finalize, switchMap, catchError } from 'rxjs/operators';
@@ -21,7 +22,7 @@ export interface Breadcrumb {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, Ideapage],
+  imports: [CommonModule, Ideapage, IdeaGroupNew],
   templateUrl: './landing.html',
   styleUrl: './landing.css'
 })
