@@ -56,7 +56,7 @@ class IdeaGroupMapperTest {
             @Override public String getLinkedIdeaId() { return "linkX"; }
         };
         IdeaGroupEntity e2 = new IdeaGroupEntity() {
-                    @Override public String getIdAsString() { return "507f191e810c19729de860eb"; }
+            @Override public String getIdAsString() { return "507f191e810c19729de860eb"; }
             @Override public String getName() { return "nameY"; }
             @Override public ObjectId getUserId() { return userId2;}
             @Override public String getLinkedIdeaId() { return "linkY"; }
