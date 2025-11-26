@@ -1,5 +1,5 @@
 Angular version 20.3.8
-Tailwindcss/postcss: 4.1.16
+Tailwindcss/postcss": 4.1.16
 
 ###################################
 Install MongoDB compass to view data
@@ -12,14 +12,15 @@ Test user service
 
 curl.exe -X POST http://localhost:8080/api/users/login -H "Content-Type: application/json" -d '{\"username\": \"admin\", \"password\": \"*******\"}'
 
-###################################
-Run all unit tests
-##################################
-.\gradlew clean test
-
 ###############################
 How to start frontend server:
 ###############################
 in the terminal go into src/main/frontend!
 
 ng serve
+
+
+
+
+
+
