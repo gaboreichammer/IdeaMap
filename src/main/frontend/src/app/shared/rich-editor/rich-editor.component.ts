@@ -1,12 +1,12 @@
 import { Component, model, input, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-rich-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, QuillModule],
+  imports: [FormsModule, QuillModule],
   templateUrl: './rich-editor.component.html',
   styleUrl: './rich-editor.component.css'
 })

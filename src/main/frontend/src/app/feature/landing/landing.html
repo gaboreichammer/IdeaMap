@@ -18,14 +18,16 @@
       <!-- Left Column: Idea Group List -->
       <div class="col-span-2 sidebar shadow-lg rounded-xl">
         <ul class="group-list">
-          <ng-container *ngIf="ideaGroups().length > 0">
-            <li *ngFor="let group of ideaGroups()"
+          @if (ideaGroups().length > 0) {
+            @for (group of ideaGroups(); track group) {
+              <li
                 (click)="selectIdeaGroup(group)"
                 [class.selected]="selectedIdeaGroup()?.id === group.id && !isAddingNewIdeaGroup()"
                 class="group-item">
-              <span class="text-2xl font-extrabold text-white-800">{{ group.name }}</span>
-            </li>
-          </ng-container>
+                <span class="text-2xl font-extrabold text-white-800">{{ group.name }}</span>
+              </li>
+            }
+          }
           <li class="group-item" (click)="addNewIdeaGroup()" [class.selected]="isAddingNewIdeaGroup()">
             <span class="text-2xl font-extrabold text-white-800"> + </span>
           </li>
@@ -36,46 +38,51 @@
       <div class="col-span-8">
 
         <!-- Case 1: No group selected -->
-        <ng-container *ngIf="!selectedIdeaGroup()">
+        @if (!selectedIdeaGroup()) {
           <h2 class="text-2xl font-semibold mb-4">Idea Group Details</h2>
           <div class="data-area-placeholder">
             <p class="text-gray-600">Select an Idea Group from the list on the left to view its details.</p>
           </div>
-        </ng-container>
+        }
 
         <!-- Case 2: Group selected -->
-        <ng-container *ngIf="!isAddingNewIdeaGroup()">
-          <ng-container *ngIf="selectedIdeaGroup() as group">
+        @if (!isAddingNewIdeaGroup()) {
+          @if (selectedIdeaGroup(); as group) {
             <!-- Linked Idea Content -->
             <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
               <!-- Loading State -->
-              <div *ngIf="isLoadingLinkedIdea()" class="text-center py-8 text-blue-600 min-h-96 flex flex-col justify-center items-center">
-                <p class="text-3xl">Loading linked idea data...</p>
-                <!-- Simple Spin Icon (using inline SVG for portability) -->
-                <svg class="animate-spin h-5 w-5 text-current mx-auto mt-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </div>
-              <ideapage *ngIf="!isLoadingLinkedIdea()" [linkedIdea]="linkedIdea()" (ideaClicked)="onIdeaLinkClick($event)"></ideapage>
+              @if (isLoadingLinkedIdea()) {
+                <div class="text-center py-8 text-blue-600 min-h-96 flex flex-col justify-center items-center">
+                  <p class="text-3xl">Loading linked idea data...</p>
+                  <!-- Simple Spin Icon (using inline SVG for portability) -->
+                  <svg class="animate-spin h-5 w-5 text-current mx-auto mt-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                </div>
+              }
+              @if (!isLoadingLinkedIdea()) {
+                <ideapage [linkedIdea]="linkedIdea()" (ideaClicked)="onIdeaLinkClick($event)"></ideapage>
+              }
             </div>
-          </ng-container>
-        </ng-container>
+          }
+        }
 
-        <ng-container *ngIf="isAddingNewIdeaGroup()">
-            <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
-              <idea-group-new></idea-group-new>
-            </div>
-        </ng-container>
+        @if (isAddingNewIdeaGroup()) {
+          <div class="idea-detail-card p-6 bg-white shadow-lg rounded-xl">
+            <idea-group-new></idea-group-new>
+          </div>
+        }
 
       </div>
 
       <!-- Breadcrumbs -->
       <div class="col-span-2 flex flex-col space-y-3 p-4 bg-white shadow-lg rounded-xl">
         <h3 class="text-xl font-bold text-gray-700 mt-2">🍞 Breadcrumbs</h3>
-        <span *ngFor="let breadcrumb of breadcrumbs()" class="block w-full">
-          <button
-            (click)="clickedBreadcrumb(breadcrumb)"
+        @for (breadcrumb of breadcrumbs(); track breadcrumb) {
+          <span class="block w-full">
+            <button
+              (click)="clickedBreadcrumb(breadcrumb)"
             class="
               w-full px-4 py-2
               bg-indigo-600 text-white
@@ -85,9 +92,10 @@
               transition duration-150
               text-sm text-left truncate
             ">
-            {{ breadcrumb.groupName }} : {{ breadcrumb.name }}
-          </button>
-        </span>
+              {{ breadcrumb.groupName }} : {{ breadcrumb.name }}
+            </button>
+          </span>
+        }
       </div>
 
     </div>
