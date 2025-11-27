@@ -1,48 +1,51 @@
-<div *ngIf="editableIdea() as idea" class="p-6 bg-white shadow-xl rounded-xl">
-  <!-- Header and Title -->
-  <div class="flex justify-between items-start mb-4">
-    <h4 class="text-3xl font-extrabold text-indigo-800">{{ idea.name }}</h4>
-
-    <!-- Save Button -->
-    <button
-      (click)="saveIdea()"
-      class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150">
-      💾 Save Changes
-    </button>
-  </div>
-
-  <!-- Rich Text Editor (replaces the plain <p> tag) -->
-  <div class="mb-6">
-    <app-rich-editor
-      [(content)]="idea.text">
-    </app-rich-editor>
-  </div>
-
-  <a *ngIf="idea.link" [href]="idea.link" target="_blank"
-     class="link-button mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
-      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
-    </svg>
-    View Original Source
-  </a>
-
-  <!-- Tags and Link -->
-  <div class="flex flex-wrap gap-2 text-sm mb-4">
-    <span *ngFor="let tag of idea.tags"
-          class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-medium border border-gray-200">
-      #{{ tag.name }}
-    </span>
-  </div>
-
-  <div class="flex flex-wrap gap-2 text-sm mb-4">
-    <span *ngFor="let linkedIdea of idea.linkedIdeas">
+@if (editableIdea(); as idea) {
+  <div class="p-6 bg-white shadow-xl rounded-xl">
+    <!-- Header and Title -->
+    <div class="flex justify-between items-start mb-4">
+      <h4 class="text-3xl font-extrabold text-indigo-800">{{ idea.name }}</h4>
+      <!-- Save Button -->
       <button
+        (click)="saveIdea()"
+        class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150">
+        💾 Save Changes
+      </button>
+    </div>
+    <!-- Rich Text Editor (replaces the plain <p> tag) -->
+    <div class="mb-6">
+      <app-rich-editor
+        [(content)]="idea.text">
+      </app-rich-editor>
+    </div>
+    @if (idea.link) {
+      <a [href]="idea.link" target="_blank"
+        class="link-button mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+          <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+        </svg>
+        View Original Source
+      </a>
+    }
+    <!-- Tags and Link -->
+    <div class="flex flex-wrap gap-2 text-sm mb-4">
+      @for (tag of idea.tags; track tag.id) {
+        <span
+          class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-medium border border-gray-200">
+          #{{ tag.name }}
+        </span>
+      }
+    </div>
+    <div class="flex flex-wrap gap-2 text-sm mb-4">
+      @for (linkedIdea of idea.linkedIdeas; track linkedIdea.id) {
+        <span>
+          <button
             (click)="clickLinkedIdea(linkedIdea)"
             class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150">
-      💡 {{ linkedIdea.name }}
-    </button>
-    </span>
+            💡 {{ linkedIdea.name }}
+          </button>
+        </span>
+      }
+    </div>
   </div>
-</div>
+}
 

@@ -1,5 +1,5 @@
 import { Component, input, effect, signal, output } from '@angular/core'; // Import 'input'
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Idea, Tag, IdeaLink } from '../../services/idea.service';
 import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.component';
@@ -7,7 +7,7 @@ import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.compon
 @Component({
   selector: 'ideapage', // Make sure the selector matches the tag in landing.html
   standalone: true,
-  imports: [CommonModule, FormsModule, RichEditorComponent],
+  imports: [FormsModule, RichEditorComponent],
   templateUrl: './ideapage.html',
   styleUrl: './ideapage.css'
 })

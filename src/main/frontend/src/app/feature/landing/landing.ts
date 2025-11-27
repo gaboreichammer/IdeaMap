@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { IdeaGroupService, IdeaGroup } from '../../services/idea-group.service';
@@ -22,7 +22,7 @@ export interface Breadcrumb {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, Ideapage, IdeaGroupNew],
+  imports: [Ideapage, IdeaGroupNew],
   templateUrl: './landing.html',
   styleUrl: './landing.css'
 })
