@@ -28,7 +28,7 @@
     }
     <!-- Tags and Link -->
     <div class="flex flex-wrap gap-2 text-sm mb-4">
-      @for (tag of idea.tags; track tag) {
+      @for (tag of idea.tags; track tag.id) {
         <span
           class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-medium border border-gray-200">
           #{{ tag.name }}
@@ -36,7 +36,7 @@
       }
     </div>
     <div class="flex flex-wrap gap-2 text-sm mb-4">
-      @for (linkedIdea of idea.linkedIdeas; track linkedIdea) {
+      @for (linkedIdea of idea.linkedIdeas; track linkedIdea.id) {
         <span>
           <button
             (click)="clickLinkedIdea(linkedIdea)"

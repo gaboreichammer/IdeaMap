@@ -19,7 +19,7 @@
       <div class="col-span-2 sidebar shadow-lg rounded-xl">
         <ul class="group-list">
           @if (ideaGroups().length > 0) {
-            @for (group of ideaGroups(); track group) {
+            @for (group of ideaGroups(); track group.id) {
               <li
                 (click)="selectIdeaGroup(group)"
                 [class.selected]="selectedIdeaGroup()?.id === group.id && !isAddingNewIdeaGroup()"
@@ -79,7 +79,7 @@
       <!-- Breadcrumbs -->
       <div class="col-span-2 flex flex-col space-y-3 p-4 bg-white shadow-lg rounded-xl">
         <h3 class="text-xl font-bold text-gray-700 mt-2">🍞 Breadcrumbs</h3>
-        @for (breadcrumb of breadcrumbs(); track breadcrumb) {
+        @for (breadcrumb of breadcrumbs(); track breadcrumb.id) {
           <span class="block w-full">
             <button
               (click)="clickedBreadcrumb(breadcrumb)"
